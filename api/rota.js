@@ -28,6 +28,14 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "expected a JSON array, or { version, entries }" });
       }
 
+      // Only superadmin can delete entries (i.e. send fewer entries than currently stored)
+      if (session.role !== "superadmin" && expected !== null) {
+        const current = await readRota();
+        if (entries.length < current.entries.length) {
+          return res.status(403).json({ error: "forbidden", detail: "Only the super admin can delete rota entries." });
+        }
+      }
+
       // Stamp each entry with who saved it and when
       const now = new Date().toISOString();
       const stamped = entries.map(e => ({

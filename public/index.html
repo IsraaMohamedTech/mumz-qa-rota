@@ -605,7 +605,7 @@ function setModalType(type){
 function openModal(entry){
   $("entryId").value=entry?entry.id:"";
   $("modalTitle").textContent=entry?"Edit rota entry":"Add rota entry";
-  $("deleteBtn").classList.toggle("hidden",!entry);
+  $("deleteBtn").classList.toggle("hidden",!entry||currentRole!=="superadmin");
   setModalType(entry?entry.type:"oncall");
   $("fFrom").value=entry?entry.from||"":TODAY;
   $("fTo").value=entry?entry.to||"":TODAY;
