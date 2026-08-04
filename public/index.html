@@ -6,15 +6,15 @@
 <title>Mumzworld QA Rota</title>
 <style>
   :root {
-    --bg: #0f1117; --panel: #171a24; --panel-2: #1f2331; --panel-3: #262b3b;
-    --border: #2c3245; --text: #e8eaf1; --muted: #8a90a6; --faint:#666d85;
-    --accent: #6c8cff; --radius: 14px; --shadow: 0 8px 30px rgba(0,0,0,.35);
+    --bg:#0f1117; --panel:#171a24; --panel-2:#1f2331; --panel-3:#262b3b;
+    --border:#2c3245; --text:#e8eaf1; --muted:#8a90a6; --faint:#666d85;
+    --accent:#6c8cff; --radius:14px; --shadow:0 8px 30px rgba(0,0,0,.35);
     --oncall:#6c8cff; --oncall-bg:rgba(108,140,255,.14);
     --regression:#f0883e; --regression-bg:rgba(240,136,62,.14);
     --postcheck:#56d4a0; --postcheck-bg:rgba(86,212,160,.14);
     --active:#ffd34d;
   }
-  @media (prefers-color-scheme: light) {
+  @media (prefers-color-scheme:light) {
     :root {
       --bg:#f5f6fb; --panel:#ffffff; --panel-2:#f3f5fb; --panel-3:#e9edf7;
       --border:#e1e5f0; --text:#1a1e2c; --muted:#68708a; --faint:#98a0b5;
@@ -23,142 +23,135 @@
       --postcheck-bg:rgba(86,212,160,.16);
     }
   }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body {
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    background:var(--bg); color:var(--text); min-height:100vh; -webkit-font-smoothing:antialiased;
-    font-size:14px;
-  }
-  .wrap { max-width:1240px; margin:0 auto; padding:28px 22px 90px; }
-
-  header { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px; }
-  .brand { display:flex; align-items:center; gap:14px; }
-  .logo { width:46px; height:46px; border-radius:13px; background:linear-gradient(135deg,var(--accent),#56d4a0); display:grid; place-items:center; font-size:24px; box-shadow:var(--shadow); }
-  .brand h1 { font-size:21px; font-weight:750; letter-spacing:-.02em; }
-  .brand p { font-size:12.5px; color:var(--muted); margin-top:2px; }
-  .head-actions { display:flex; gap:9px; flex-wrap:wrap; align-items:center; }
-
-  button { font:inherit; cursor:pointer; border:1px solid var(--border); border-radius:10px; padding:9px 15px; font-weight:600; transition:.15s; color:var(--text); background:var(--panel-2); }
-  button:hover { transform:translateY(-1px); border-color:var(--accent); }
-  button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
-  button.primary { background:linear-gradient(135deg,var(--accent),#7d9bff); color:#fff; border:none; }
-  button.ghost { background:transparent; }
-  button.sm { padding:6px 11px; font-size:12.5px; }
-  button.icon { padding:6px 9px; }
-  select, input, textarea { font:inherit; color:var(--text); background:var(--panel-2); border:1px solid var(--border); border-radius:10px; padding:9px 12px; outline:none; transition:.15s; }
-  select:focus, input:focus, textarea:focus { border-color:var(--accent); }
-  select { cursor:pointer; }
-
-  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-bottom:22px; }
-  .stat { background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; position:relative; overflow:hidden; }
-  .stat .bar { position:absolute; left:0; top:0; bottom:0; width:4px; }
-  .stat .k { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; font-weight:600; }
-  .stat .v { font-size:28px; font-weight:750; margin-top:6px; letter-spacing:-.02em; }
-  .stat .s { font-size:12px; color:var(--faint); margin-top:3px; }
-
-  .toolbar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:16px; }
-  .tabs { display:flex; gap:6px; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:4px; }
-  .tab { padding:8px 15px; border-radius:9px; font-weight:600; font-size:13px; cursor:pointer; color:var(--muted); transition:.15s; white-space:nowrap; }
-  .tab:hover { color:var(--text); }
-  .tab.active { background:var(--panel-3); color:var(--text); }
-  .tab .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:7px; vertical-align:middle; }
-  .spacer { flex:1; }
-  .search { position:relative; min-width:170px; }
-  .search input { width:100%; padding-left:34px; }
-  .search::before { content:"🔍"; position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:13px; opacity:.6; }
-
-  .table-card { background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); }
-  .tbl-scroll { overflow-x:auto; }
-  table { width:100%; border-collapse:collapse; min-width:820px; }
-  thead th { text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700; padding:14px 16px; background:var(--panel-2); border-bottom:1px solid var(--border); white-space:nowrap; }
-  tbody td { padding:14px 16px; border-bottom:1px solid var(--border); vertical-align:middle; }
-  tbody tr:last-child td { border-bottom:none; }
-  tbody tr { transition:.12s; }
-  tbody tr:hover { background:var(--panel-2); }
-  tbody tr.active-row { background:linear-gradient(90deg,rgba(255,211,77,.12),transparent); }
-
-  .group-row td { padding:0; border-bottom:1px solid var(--border); }
-  .group-row:hover { background:transparent; }
-  .group-title { display:inline-flex; align-items:center; gap:9px; font-weight:750; font-size:13px; padding:11px 16px; }
-  .group-title .gd { width:10px; height:10px; border-radius:3px; background:var(--gc); }
-  .group-count { font-size:11.5px; color:var(--muted); font-weight:600; }
-  .group-row.type-oncall td     { background:var(--oncall-bg); }
-  .group-row.type-regression td { background:var(--regression-bg); }
-  .group-row.type-postcheck td  { background:var(--postcheck-bg); }
-  tbody tr.type-oncall td:first-child     { box-shadow:inset 3px 0 0 var(--oncall); }
-  tbody tr.type-regression td:first-child { box-shadow:inset 3px 0 0 var(--regression); }
-  tbody tr.type-postcheck td:first-child  { box-shadow:inset 3px 0 0 var(--postcheck); }
-
-  .badge { display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; padding:5px 11px; border-radius:20px; white-space:nowrap; }
-  .badge .d { width:7px; height:7px; border-radius:50%; }
-  .b-oncall { background:var(--oncall-bg); color:var(--oncall); }
-  .b-regression { background:var(--regression-bg); color:var(--regression); }
-  .b-postcheck { background:var(--postcheck-bg); color:var(--postcheck); }
-  .now-tag { font-size:10px; font-weight:800; color:#5a4600; background:var(--active); padding:2px 8px; border-radius:20px; margin-left:8px; text-transform:uppercase; letter-spacing:.04em; }
-
-  .status { display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:750; padding:5px 11px; border-radius:20px; white-space:nowrap; }
-  .status .d { width:8px; height:8px; border-radius:50%; }
-  .s-active   { background:rgba(86,212,160,.16); color:#2fb985; }
-  .s-active .d{ background:#35c78e; box-shadow:0 0 0 0 rgba(53,199,142,.6); animation:pulse 1.8s infinite; }
-  .s-upcoming { background:rgba(108,140,255,.16); color:var(--oncall); }
-  .s-upcoming .d{ background:var(--oncall); }
-  .s-ended    { background:rgba(138,144,166,.16); color:var(--muted); }
-  .s-ended .d { background:var(--faint); }
-  @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(53,199,142,.55)} 70%{box-shadow:0 0 0 7px rgba(53,199,142,0)} 100%{box-shadow:0 0 0 0 rgba(53,199,142,0)} }
-  @media (prefers-reduced-motion: reduce) { .s-active .d { animation:none; } * { transition:none !important; } }
-  .w-todo   { background:rgba(138,144,166,.18); color:var(--muted); }
-  .w-todo .d{ background:var(--faint); }
-  .w-inprog { background:rgba(240,136,62,.16); color:var(--regression); }
-  .w-inprog .d{ background:var(--regression); }
-  .w-done   { background:rgba(86,212,160,.16); color:#2fb985; }
-  .w-done .d{ background:#35c78e; }
-
-  .team { font-weight:650; }
-  .daterange { font-variant-numeric:tabular-nums; white-space:nowrap; }
-  .daterange .to { color:var(--faint); margin:0 5px; }
-  .dur { font-size:11.5px; color:var(--faint); margin-top:2px; }
-  .cmt { color:var(--muted); font-size:13px; max-width:260px; }
-  .rel-name { font-weight:600; }
-  .link { color:var(--accent); text-decoration:none; }
-  .link:hover { text-decoration:underline; }
-  .file-chip { display:inline-flex; align-items:center; gap:5px; font-size:12px; background:var(--panel-3); padding:4px 9px; border-radius:8px; color:var(--text); text-decoration:none; margin-top:4px; }
-  .dash { color:var(--faint); }
-  .swap-tag { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; color:#c98a2b; background:rgba(240,136,62,.14); padding:4px 10px; border-radius:8px; white-space:normal; }
-  td.team .swap-tag { margin-top:6px; font-size:11.5px; }
-  .row-actions { display:flex; gap:6px; justify-content:flex-end; }
-
-  .empty { text-align:center; color:var(--muted); padding:64px 20px; }
-  .empty .big { font-size:46px; margin-bottom:12px; }
-
-  .modal-bg { position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; place-items:center; padding:20px; z-index:50; backdrop-filter:blur(4px); overflow:auto; }
-  .modal-bg.show { display:grid; }
-  .modal { background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:26px; width:100%; max-width:560px; box-shadow:var(--shadow); margin:auto; }
-  .modal h3 { font-size:18px; margin-bottom:6px; }
-  .modal .sub { color:var(--muted); font-size:13px; margin-bottom:18px; }
-  .type-pick { display:flex; gap:8px; margin-bottom:18px; }
-  .type-pick .tp { flex:1; text-align:center; padding:11px 8px; border-radius:11px; border:1.5px solid var(--border); font-weight:650; font-size:13px; cursor:pointer; transition:.15s; }
-  .type-pick .tp:hover { border-color:var(--accent); }
-  .type-pick .tp.sel { border-color:var(--accent); background:var(--panel-2); }
-  .type-pick .tp .d { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
-  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  label { display:block; font-size:12px; color:var(--muted); margin:14px 0 6px; font-weight:600; }
-  .grid2 label { margin-top:0; }
-  .modal input, .modal textarea, .modal select { width:100%; }
-  .rel-fields { border-top:1px solid var(--border); margin-top:18px; padding-top:6px; }
-  .file-row { display:flex; align-items:center; gap:10px; margin-top:6px; }
-  .cur-file { font-size:12px; color:var(--muted); }
-  .modal-actions { display:flex; gap:10px; margin-top:24px; }
-  .modal-actions button { flex:1; }
-  .modal-actions .del { flex:0 0 auto; }
-
-  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px); background:#56d4a0; color:#04241a; padding:12px 22px; border-radius:10px; font-weight:650; font-size:14px; opacity:0; transition:.3s; z-index:100; }
-  .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
-  .footer-note { text-align:center; color:var(--faint); font-size:12px; margin-top:34px; line-height:1.6; }
-  .hidden { display:none !important; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:14px}
+  .wrap{max-width:1240px;margin:0 auto;padding:28px 22px 90px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+  .brand{display:flex;align-items:center;gap:14px}
+  .logo{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--accent),#56d4a0);display:grid;place-items:center;font-size:24px;box-shadow:var(--shadow)}
+  .brand h1{font-size:21px;font-weight:750;letter-spacing:-.02em}
+  .brand p{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .head-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+  button{font:inherit;cursor:pointer;border:1px solid var(--border);border-radius:10px;padding:9px 15px;font-weight:600;transition:.15s;color:var(--text);background:var(--panel-2)}
+  button:hover{transform:translateY(-1px);border-color:var(--accent)}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  button.primary{background:linear-gradient(135deg,var(--accent),#7d9bff);color:#fff;border:none}
+  button.danger{background:rgba(229,100,109,.15);color:#e5646d;border-color:rgba(229,100,109,.3)}
+  button.danger:hover{background:rgba(229,100,109,.25)}
+  button.ghost{background:transparent}
+  button.sm{padding:6px 11px;font-size:12.5px}
+  select,input,textarea{font:inherit;color:var(--text);background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;outline:none;transition:.15s}
+  select:focus,input:focus,textarea:focus{border-color:var(--accent)}
+  select{cursor:pointer}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+  .stat{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;position:relative;overflow:hidden}
+  .stat .bar{position:absolute;left:0;top:0;bottom:0;width:4px}
+  .stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+  .stat .v{font-size:28px;font-weight:750;margin-top:6px;letter-spacing:-.02em}
+  .stat .s{font-size:12px;color:var(--faint);margin-top:3px}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+  .tabs{display:flex;gap:6px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:4px}
+  .tab{padding:8px 15px;border-radius:9px;font-weight:600;font-size:13px;cursor:pointer;color:var(--muted);transition:.15s;white-space:nowrap}
+  .tab:hover{color:var(--text)}
+  .tab.active{background:var(--panel-3);color:var(--text)}
+  .tab .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:middle}
+  .spacer{flex:1}
+  .search{position:relative;min-width:170px}
+  .search input{width:100%;padding-left:34px}
+  .search::before{content:"🔍";position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:13px;opacity:.6}
+  .table-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+  .tbl-scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;min-width:820px}
+  thead th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding:14px 16px;background:var(--panel-2);border-bottom:1px solid var(--border);white-space:nowrap}
+  tbody td{padding:14px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr{transition:.12s}
+  tbody tr:hover{background:var(--panel-2)}
+  tbody tr.active-row{background:linear-gradient(90deg,rgba(255,211,77,.12),transparent)}
+  .group-row td{padding:0;border-bottom:1px solid var(--border)}
+  .group-row:hover{background:transparent}
+  .group-title{display:inline-flex;align-items:center;gap:9px;font-weight:750;font-size:13px;padding:11px 16px}
+  .group-title .gd{width:10px;height:10px;border-radius:3px;background:var(--gc)}
+  .group-count{font-size:11.5px;color:var(--muted);font-weight:600}
+  .group-row.type-oncall td{background:var(--oncall-bg)}
+  .group-row.type-regression td{background:var(--regression-bg)}
+  .group-row.type-postcheck td{background:var(--postcheck-bg)}
+  tbody tr.type-oncall td:first-child{box-shadow:inset 3px 0 0 var(--oncall)}
+  tbody tr.type-regression td:first-child{box-shadow:inset 3px 0 0 var(--regression)}
+  tbody tr.type-postcheck td:first-child{box-shadow:inset 3px 0 0 var(--postcheck)}
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:20px;white-space:nowrap}
+  .badge .d{width:7px;height:7px;border-radius:50%}
+  .b-oncall{background:var(--oncall-bg);color:var(--oncall)}
+  .b-regression{background:var(--regression-bg);color:var(--regression)}
+  .b-postcheck{background:var(--postcheck-bg);color:var(--postcheck)}
+  .status{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:750;padding:5px 11px;border-radius:20px;white-space:nowrap}
+  .status .d{width:8px;height:8px;border-radius:50%}
+  .s-active{background:rgba(86,212,160,.16);color:#2fb985}
+  .s-active .d{background:#35c78e;animation:pulse 1.8s infinite}
+  .s-upcoming{background:rgba(108,140,255,.16);color:var(--oncall)}
+  .s-upcoming .d{background:var(--oncall)}
+  .s-ended{background:rgba(138,144,166,.16);color:var(--muted)}
+  .s-ended .d{background:var(--faint)}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(53,199,142,.55)}70%{box-shadow:0 0 0 7px rgba(53,199,142,0)}100%{box-shadow:0 0 0 0 rgba(53,199,142,0)}}
+  @media (prefers-reduced-motion:reduce){.s-active .d{animation:none}*{transition:none !important}}
+  .w-todo{background:rgba(138,144,166,.18);color:var(--muted)}
+  .w-todo .d{background:var(--faint)}
+  .w-inprog{background:rgba(240,136,62,.16);color:var(--regression)}
+  .w-inprog .d{background:var(--regression)}
+  .w-done{background:rgba(86,212,160,.16);color:#2fb985}
+  .w-done .d{background:#35c78e}
+  .team{font-weight:650}
+  .daterange{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .daterange .to{color:var(--faint);margin:0 5px}
+  .dur{font-size:11.5px;color:var(--faint);margin-top:2px}
+  .cmt{color:var(--muted);font-size:13px;max-width:220px}
+  .audit{font-size:11px;color:var(--faint);margin-top:3px;white-space:nowrap}
+  .rel-name{font-weight:600}
+  .link{color:var(--accent);text-decoration:none}
+  .link:hover{text-decoration:underline}
+  .file-chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;background:var(--panel-3);padding:4px 9px;border-radius:8px;color:var(--text);text-decoration:none;margin-top:4px}
+  .dash{color:var(--faint)}
+  .swap-tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#c98a2b;background:rgba(240,136,62,.14);padding:4px 10px;border-radius:8px;white-space:normal}
+  td.team .swap-tag{margin-top:6px;font-size:11.5px}
+  .row-actions{display:flex;gap:6px;justify-content:flex-end}
+  .user-badge{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block}
+  .empty{text-align:center;color:var(--muted);padding:64px 20px}
+  .empty .big{font-size:46px;margin-bottom:12px}
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;place-items:center;padding:20px;z-index:50;backdrop-filter:blur(4px);overflow:auto}
+  .modal-bg.show{display:grid}
+  .modal{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:26px;width:100%;max-width:560px;box-shadow:var(--shadow);margin:auto}
+  .modal h3{font-size:18px;margin-bottom:6px}
+  .modal .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+  .type-pick{display:flex;gap:8px;margin-bottom:18px}
+  .type-pick .tp{flex:1;text-align:center;padding:11px 8px;border-radius:11px;border:1.5px solid var(--border);font-weight:650;font-size:13px;cursor:pointer;transition:.15s}
+  .type-pick .tp:hover{border-color:var(--accent)}
+  .type-pick .tp.sel{border-color:var(--accent);background:var(--panel-2)}
+  .type-pick .tp .d{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  label{display:block;font-size:12px;color:var(--muted);margin:14px 0 6px;font-weight:600}
+  .grid2 label{margin-top:0}
+  .modal input,.modal textarea,.modal select{width:100%}
+  .rel-fields{border-top:1px solid var(--border);margin-top:18px;padding-top:6px}
+  .file-row{display:flex;align-items:center;gap:10px;margin-top:6px}
+  .cur-file{font-size:12px;color:var(--muted)}
+  .modal-actions{display:flex;gap:10px;margin-top:24px}
+  .modal-actions button{flex:1}
+  .modal-actions .del{flex:0 0 auto}
+  .users-table{width:100%;border-collapse:collapse;margin-top:14px}
+  .users-table th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding:8px 12px;border-bottom:1px solid var(--border)}
+  .users-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px}
+  .users-table tr:last-child td{border-bottom:none}
+  .role-pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
+  .role-superadmin{background:rgba(108,140,255,.2);color:var(--accent)}
+  .role-admin{background:rgba(240,136,62,.16);color:var(--regression)}
+  .role-viewer{background:rgba(138,144,166,.16);color:var(--muted)}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#56d4a0;color:#04241a;padding:12px 22px;border-radius:10px;font-weight:650;font-size:14px;opacity:0;transition:.3s;z-index:100}
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+  .footer-note{text-align:center;color:var(--faint);font-size:12px;margin-top:34px;line-height:1.6}
+  .hidden{display:none !important}
 </style>
 </head>
 <body>
-
 <div class="wrap">
   <header>
     <div class="brand">
@@ -166,15 +159,20 @@
       <div>
         <h1>QA Rota Dashboard</h1>
         <p>On-Call · Regression · Post Checks — <span id="yearLabel"></span></p>
-        <div id="storeBadge" style="margin-top:7px;font-size:11.5px;font-weight:700;display:none;align-items:center;gap:6px;padding:3px 10px;border-radius:20px"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:7px;align-items:center">
+          <div id="storeBadge" style="font-size:11.5px;font-weight:700;display:none;align-items:center;gap:6px;padding:3px 10px;border-radius:20px"></div>
+          <div id="userBadge" class="user-badge hidden"></div>
+        </div>
       </div>
     </div>
     <div class="head-actions">
       <select id="yearSelect" title="Year"></select>
-      <button class="ghost" id="refreshBtn" title="Reload the shared rota">↻ Refresh</button>
-      <button class="ghost" id="importBtn">⬆ Import</button>
+      <button class="ghost" id="refreshBtn" title="Reload">↻ Refresh</button>
+      <button class="ghost hidden" id="manageUsersBtn">👥 Users</button>
+      <button class="ghost hidden" id="importBtn">⬆ Import</button>
       <button class="ghost" id="exportBtn">⬇ Export</button>
-      <button class="primary" id="addBtn">+ Add rota entry</button>
+      <button class="primary hidden" id="addBtn">+ Add entry</button>
+      <button class="ghost" id="signOutBtn" style="font-size:12.5px">Sign out</button>
     </div>
   </header>
 
@@ -188,57 +186,49 @@
       <div class="tab" data-type="postcheck"><span class="dot" style="background:var(--postcheck)"></span>Post Checks</div>
     </div>
     <div class="spacer"></div>
-    <select id="rangeSelect" title="Date range">
+    <select id="rangeSelect">
       <option value="all">Whole year</option>
       <option value="week">This week</option>
       <option value="month">This month</option>
       <option value="upcoming">Upcoming</option>
     </select>
-    <div class="search"><input type="text" id="searchInput" placeholder="Search team, release, comment…"></div>
+    <div class="search"><input type="text" id="searchInput" placeholder="Search…"></div>
   </div>
 
   <div class="table-card">
     <div class="tbl-scroll">
-      <table>
-        <thead><tr id="theadRow"></tr></thead>
-        <tbody id="tbody"></tbody>
-      </table>
+      <table><thead><tr id="theadRow"></tr></thead><tbody id="tbody"></tbody></table>
     </div>
     <div class="empty hidden" id="emptyState">
       <div class="big">🗓️</div>
-      <p id="emptyMsg">No rota entries yet. Click <b>+ Add rota entry</b> to get started.</p>
+      <p id="emptyMsg">No rota entries yet.</p>
     </div>
   </div>
-
   <p class="footer-note" id="storeHelp"></p>
   <p class="footer-note" id="storeDiag" style="font-size:11px;opacity:.75"></p>
 </div>
 
+<!-- Add/Edit entry modal -->
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <h3 id="modalTitle">Add rota entry</h3>
     <div class="sub">Pick the rota type, then fill in the details.</div>
     <input type="hidden" id="entryId">
-
     <div class="type-pick" id="typePick">
       <div class="tp sel" data-type="oncall"><span class="d" style="background:var(--oncall)"></span>QA on Call</div>
       <div class="tp" data-type="regression"><span class="d" style="background:var(--regression)"></span>Regression</div>
       <div class="tp" data-type="postcheck"><span class="d" style="background:var(--postcheck)"></span>Post Checks</div>
     </div>
-
     <div class="grid2">
       <div><label id="labelFrom">Date from</label><input type="date" id="fFrom"></div>
       <div id="toFieldWrap"><label>Date to</label><input type="date" id="fTo"></div>
     </div>
-
     <label>QA team name</label>
     <input type="text" id="fTeam" placeholder="e.g. Team Falcon / Sara A.">
-
     <div id="oncallFields">
       <label>Swap / cover <span style="color:var(--faint);font-weight:400">(optional)</span></label>
       <input type="text" id="fSwap" placeholder="e.g. Omar covering for Sara on 12 Jul">
     </div>
-
     <div class="rel-fields hidden" id="relFields">
       <div class="grid2">
         <div><label>Status</label>
@@ -260,14 +250,57 @@
       </div>
       <input type="file" id="fFile" class="hidden">
     </div>
-
     <label>Comment</label>
     <textarea id="fComment" rows="2" placeholder="Notes, scope, coverage, hand-off info…"></textarea>
-
     <div class="modal-actions">
-      <button class="ghost del hidden" id="deleteBtn">Delete</button>
+      <button class="danger hidden" id="deleteBtn">Delete</button>
       <button class="ghost" id="cancelBtn">Cancel</button>
       <button class="primary" id="saveBtn">Save entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- Manage Users modal (superadmin only) -->
+<div class="modal-bg" id="usersMg" style="z-index:60">
+  <div class="modal" style="max-width:620px">
+    <h3>Manage Users</h3>
+    <div class="sub">Add team members and set their access level.</div>
+    <div id="usersList"></div>
+    <div style="border-top:1px solid var(--border);margin-top:18px;padding-top:18px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:12px">Add new user</div>
+      <div class="grid2">
+        <div><label>Username</label><input type="text" id="nuUser" placeholder="e.g. sara" autocomplete="off"></div>
+        <div><label>Password</label><input type="password" id="nuPass" placeholder="••••••••" autocomplete="new-password"></div>
+      </div>
+      <label>Role</label>
+      <select id="nuRole">
+        <option value="viewer">Viewer — read only</option>
+        <option value="admin">Admin — can edit rota</option>
+      </select>
+      <div id="nuMsg" style="color:#e5646d;font-size:12.5px;margin-top:8px;min-height:16px"></div>
+      <div class="modal-actions" style="margin-top:12px">
+        <button class="ghost" id="closeUsersBtn">Close</button>
+        <button class="primary" id="addUserBtn">Add user</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Login screen -->
+<div class="modal-bg" id="lockScreen" style="z-index:80">
+  <div class="modal" style="max-width:400px">
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:42px;margin-bottom:10px">🗓️</div>
+      <h3 style="font-size:20px">Mumzworld QA Rota</h3>
+      <div class="sub" style="margin-top:6px;margin-bottom:0">Sign in to view the shared rota.</div>
+    </div>
+    <label for="lockUser">Username</label>
+    <input type="text" id="lockUser" autocomplete="username" placeholder="your username">
+    <label for="lockPass" style="margin-top:12px">Password</label>
+    <input type="password" id="lockPass" autocomplete="current-password" placeholder="••••••••">
+    <div id="lockMsg" style="color:#e5646d;font-size:12.5px;margin-top:10px;min-height:16px"></div>
+    <div class="modal-actions">
+      <button class="primary" id="lockBtn">Sign in</button>
     </div>
   </div>
 </div>
@@ -275,509 +308,563 @@
 <div class="toast" id="toast"></div>
 <input type="file" id="importFile" accept="application/json" class="hidden">
 
-<!-- Shown when the shared rota is locked. One password for the whole QA team. -->
-<div class="modal-bg" id="lockScreen" style="z-index:80">
-  <div class="modal" style="max-width:400px">
-    <h3>Mumzworld QA Rota</h3>
-    <div class="sub">Enter the team password to see and edit the shared rota.</div>
-    <label for="lockPass">Team password</label>
-    <input type="password" id="lockPass" autocomplete="current-password" placeholder="••••••••">
-    <div id="lockMsg" style="color:#e5646d;font-size:12.5px;margin-top:10px;min-height:16px"></div>
-    <div class="modal-actions">
-      <button class="primary" id="lockBtn">Unlock</button>
-    </div>
-  </div>
-</div>
-
 <script>
-(function () {
-  "use strict";
-  const LS_KEY = "qa_rota_v1";
-  const TODAY = new Date().toISOString().slice(0,10);
-  const TYPES = {
-    oncall:     { label:"QA on Call",  short:"On Call",     cls:"b-oncall",     color:"var(--oncall)",     rel:false },
-    regression: { label:"Regression",  short:"Regression",  cls:"b-regression", color:"var(--regression)", rel:true  },
-    postcheck:  { label:"Post Checks", short:"Post Checks", cls:"b-postcheck",  color:"var(--postcheck)",  rel:true  },
-  };
-  const $ = id => document.getElementById(id);
+(function(){
+"use strict";
+const TODAY = new Date().toISOString().slice(0,10);
+const TYPES = {
+  oncall:     {label:"QA on Call", short:"On Call",    cls:"b-oncall",     color:"var(--oncall)",     rel:false},
+  regression: {label:"Regression", short:"Regression", cls:"b-regression", color:"var(--regression)", rel:true},
+  postcheck:  {label:"Post Checks",short:"Post Checks",cls:"b-postcheck",  color:"var(--postcheck)",  rel:true},
+};
+const $=id=>document.getElementById(id);
 
-  let data = [];
-  let filterType = "all";
-  let curFileData = null, curFileName = null;
-  let store = null;
+let data=[], filterType="all", curFileData=null, curFileName=null;
+let store=null, sharedVersion=0;
+let currentUser=null, currentRole=null; // set after login
 
-  // ---- Storage ----
-  // The shared rota lives behind /api/rota. A 401 means "locked", not
-  // "offline", so it gets a password prompt — never a silent local copy, or
-  // someone would edit a private copy believing the team could see it.
-  const API = "/api/rota";
-  let sharedVersion = 0;
+// ---- API / Storage ----
+const API="/api/rota";
 
-  // "ok" | "locked" | "unconfigured" | "offline"
-  async function probeApi() {
-    try {
-      const r = await fetch(API, { cache: "no-store" });
-      if (r.status === 401) return "locked";
-      if (r.status === 503) return "unconfigured";
-      if (!r.ok) return "offline";
-      const body = await r.json();
-      return body && Array.isArray(body.entries) ? "ok" : "offline";
-    } catch { return "offline"; }
-  }
+async function probeApi(){
+  try{
+    const r=await fetch(API,{cache:"no-store"});
+    if(r.status===401) return "locked";
+    if(r.status===503) return "unconfigured";
+    if(!r.ok) return "offline";
+    const b=await r.json();
+    return b&&Array.isArray(b.entries)?"ok":"offline";
+  }catch{return "offline";}
+}
 
-  function sharedStore() {
-    return {
-      mode: "shared", diag: "shared rota on " + location.host,
-      async read() {
-        const res = await fetch(API, { cache: "no-store" });
-        if (res.status === 401) { showLock("Your session expired — please sign in again."); throw new Error("session expired"); }
-        if (!res.ok) throw new Error("server " + res.status);
-        const body = await res.json();
-        sharedVersion = Number(body.version || 0);
-        return Array.isArray(body.entries) ? body.entries : [];
-      },
-      async write(val) {
-        const res = await fetch(API, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ version: sharedVersion, entries: val })
-        });
-        if (res.status === 401) { showLock("Your session expired — please sign in again."); throw new Error("session expired"); }
-        if (res.status === 409) {
-          // A teammate saved while this page was open. Their version becomes the
-          // truth; overwriting it would silently delete their work.
-          const body = await res.json().catch(() => null);
-          if (body && Array.isArray(body.entries)) {
-            sharedVersion = Number(body.version || 0);
-            data = body.entries;
-            renderAll();
-          }
-          throw new Error("a teammate saved first — their version is now shown, please redo your change");
-        }
-        if (!res.ok) throw new Error("save failed (" + res.status + ")");
-        const body = await res.json().catch(() => null);
-        if (body && body.version) sharedVersion = Number(body.version);
+function sharedStore(){
+  return{
+    mode:"shared", diag:"shared rota on "+location.host,
+    async read(){
+      const res=await fetch(API,{cache:"no-store"});
+      if(res.status===401){showLock("Session expired — sign in again.");throw new Error("session expired");}
+      if(!res.ok) throw new Error("server "+res.status);
+      const b=await res.json();
+      sharedVersion=Number(b.version||0);
+      return Array.isArray(b.entries)?b.entries:[];
+    },
+    async write(val){
+      const res=await fetch(API,{method:"PUT",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({version:sharedVersion,entries:val})});
+      if(res.status===401){showLock("Session expired — sign in again.");throw new Error("session expired");}
+      if(res.status===403){toast("Viewers can't edit the rota.");throw new Error("forbidden");}
+      if(res.status===409){
+        const b=await res.json().catch(()=>null);
+        if(b&&Array.isArray(b.entries)){sharedVersion=Number(b.version||0);data=b.entries;renderAll();}
+        throw new Error("A teammate saved first — their version is now shown, please redo your change");
       }
-    };
-  }
-
-  function localStore(why) {
-    return {
-      mode: "local", diag: why + " — using this browser only",
-      async read() { try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch { return []; } },
-      async write(val) { localStorage.setItem(LS_KEY, JSON.stringify(val)); }
-    };
-  }
-
-  async function save() {
-    try { await store.write(data); }
-    catch (e) { toast("Couldn't save — " + (e && e.message ? e.message : "storage error")); }
-  }
-  function showBadge() {
-    const b = $("storeBadge");
-    b.style.display = "inline-flex";
-    if (store.mode === "shared") {
-      b.textContent = "🟢 Shared — everyone with the link sees this";
-      b.style.background = "rgba(86,212,160,.16)"; b.style.color = "#2fb985";
-      $("refreshBtn").style.display = "";
-    } else {
-      b.textContent = "🟡 This browser only (not shared yet)";
-      b.style.background = "rgba(240,136,62,.16)"; b.style.color = "#c98a2b";
-      $("refreshBtn").style.display = "none";
+      if(!res.ok) throw new Error("save failed ("+res.status+")");
+      const b=await res.json().catch(()=>null);
+      if(b&&b.version) sharedVersion=Number(b.version);
     }
-    b.title = store.diag;
-  }
-
-  const esc = s => (s||"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-  const escAttr = s => (s||"").replace(/"/g,"&quot;").replace(/</g,"&lt;");
-  const normUrl = u => /^https?:\/\//i.test(u) ? u : "https://"+u;
-  function fmtDate(d) {
-    if (!d) return "";
-    const [y,m,day] = d.split("-");
-    const mo = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][+m-1];
-    return `${+day} ${mo} ${y}`;
-  }
-  function daysBetween(a,b) {
-    if (!a||!b) return null;
-    const d = (Date.parse(b) - Date.parse(a)) / 86400000;
-    return isNaN(d) ? null : d + 1;
-  }
-  const yearOf = e => {
-    const d = e.from || e.to;
-    if (d) return d.slice(0,4);
-    const ts = e.createdAt || parseInt(e.id, 10);
-    return ts ? String(new Date(ts).getFullYear()) : String(new Date().getFullYear());
   };
-  const isActive = e => e.from && e.to && e.from <= TODAY && TODAY <= e.to;
-  const STATUS = {
-    active:   { label:"On Call",  short:"On Call",  cls:"s-active"   },
-    upcoming: { label:"Upcoming", short:"Upcoming", cls:"s-upcoming" },
-    ended:    { label:"Ended",    short:"Ended",    cls:"s-ended"    },
-  };
-  function statusOf(e) {
-    if (!e.from || !e.to) return "upcoming";
-    if (e.from > TODAY) return "upcoming";
-    if (e.to < TODAY) return "ended";
-    return "active";
-  }
-  const WORK_STATUS = {
-    todo:       { label:"To Do",       cls:"w-todo"    },
-    inprogress: { label:"In Progress", cls:"w-inprog"  },
-    done:       { label:"Done",        cls:"w-done"    },
-  };
+}
 
-  function weekBounds() {
-    const t = new Date(TODAY + "T00:00:00");
-    const dow = (t.getDay() + 6) % 7;
-    const mon = new Date(t); mon.setDate(t.getDate() - dow);
-    const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
-    const iso = x => x.toISOString().slice(0,10);
-    return [iso(mon), iso(sun)];
-  }
-  const overlaps = (aF,aT,bF,bT) => aF <= bT && bF <= aT;
-  const entryTime = e => e.createdAt || parseInt(e.id, 10) || 0;
+async function save(){
+  try{await store.write(data);}
+  catch(e){toast("Couldn't save — "+(e&&e.message?e.message:"error"));}
+}
 
-  function years() {
-    const set = new Set(data.map(yearOf).filter(Boolean));
-    set.add(TODAY.slice(0,4));
-    return [...set].sort().reverse();
+function showBadge(){
+  const b=$("storeBadge");
+  b.style.display="inline-flex";
+  if(store.mode==="shared"){
+    b.textContent="🟢 Shared";
+    b.style.background="rgba(86,212,160,.16)";b.style.color="#2fb985";
+    $("refreshBtn").style.display="";
+  }else{
+    b.textContent="🟡 Browser only";
+    b.style.background="rgba(240,136,62,.16)";b.style.color="#c98a2b";
+    $("refreshBtn").style.display="none";
   }
-  let curYear = TODAY.slice(0,4);
-  function buildYearSelect() {
-    const ys = years();
-    if (!ys.includes(curYear)) curYear = ys[0];
-    $("yearSelect").innerHTML = ys.map(y=>`<option value="${y}"${y===curYear?" selected":""}>${y}</option>`).join("");
-    $("yearLabel").textContent = curYear;
-  }
+}
 
-  function currentList() {
-    const q = $("searchInput").value.toLowerCase().trim();
-    const range = $("rangeSelect").value;
-    const [wF,wT] = weekBounds();
-    const monthPrefix = TODAY.slice(0,7);
-    const list = data.filter(e => {
-      if (yearOf(e) !== curYear) return false;
-      if (filterType !== "all" && e.type !== filterType) return false;
-      if (q) {
-        const hay = [e.team,e.comment,e.relName,e.relLink,TYPES[e.type].label].join(" ").toLowerCase();
-        if (!hay.includes(q)) return false;
+function applyRole(username, role){
+  currentUser=username; currentRole=role;
+  const canEdit=(role==="admin"||role==="superadmin");
+  const isSuperAdmin=(role==="superadmin");
+  $("addBtn").classList.toggle("hidden",!canEdit);
+  $("importBtn").classList.toggle("hidden",!canEdit);
+  $("manageUsersBtn").classList.toggle("hidden",!isSuperAdmin);
+  const ub=$("userBadge");
+  ub.classList.remove("hidden");
+  const roleLabel=isSuperAdmin?"Super Admin":role==="admin"?"Admin":"Viewer";
+  const roleCls=isSuperAdmin?"role-superadmin":role==="admin"?"role-admin":"role-viewer";
+  ub.innerHTML=`<span style="color:var(--muted)">👤 ${username}</span> <span class="role-pill ${roleCls}">${roleLabel}</span>`;
+}
+
+// ---- Helpers ----
+const esc=s=>(s||"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const escAttr=s=>(s||"").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+const normUrl=u=>/^https?:\/\//i.test(u)?u:"https://"+u;
+function fmtDate(d){
+  if(!d) return "";
+  const [y,m,day]=d.split("-");
+  const mo=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][+m-1];
+  return `${+day} ${mo} ${y}`;
+}
+function fmtAudit(e){
+  if(!e.updatedBy&&!e.updatedAt) return "";
+  const who=e.updatedBy||"unknown";
+  if(!e.updatedAt) return `by ${who}`;
+  const d=new Date(e.updatedAt);
+  const dateStr=`${d.getDate()} ${["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][d.getMonth()]} ${String(d.getFullYear()).slice(2)} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+  return `Updated by ${who} · ${dateStr}`;
+}
+function daysBetween(a,b){
+  if(!a||!b) return null;
+  const d=(Date.parse(b)-Date.parse(a))/86400000;
+  return isNaN(d)?null:d+1;
+}
+const yearOf=e=>{
+  const d=e.from||e.to;
+  if(d) return d.slice(0,4);
+  const ts=e.createdAt||parseInt(e.id,10);
+  return ts?String(new Date(ts).getFullYear()):String(new Date().getFullYear());
+};
+const isActive=e=>e.from&&e.to&&e.from<=TODAY&&TODAY<=e.to;
+const STATUS={
+  active:{label:"On Call",cls:"s-active"},
+  upcoming:{label:"Upcoming",cls:"s-upcoming"},
+  ended:{label:"Ended",cls:"s-ended"},
+};
+function statusOf(e){
+  if(!e.from||!e.to) return "upcoming";
+  if(e.from>TODAY) return "upcoming";
+  if(e.to<TODAY) return "ended";
+  return "active";
+}
+const WORK_STATUS={
+  todo:{label:"To Do",cls:"w-todo"},
+  inprogress:{label:"In Progress",cls:"w-inprog"},
+  done:{label:"Done",cls:"w-done"},
+};
+function weekBounds(){
+  const t=new Date(TODAY+"T00:00:00");
+  const dow=(t.getDay()+6)%7;
+  const mon=new Date(t);mon.setDate(t.getDate()-dow);
+  const sun=new Date(mon);sun.setDate(mon.getDate()+6);
+  const iso=x=>x.toISOString().slice(0,10);
+  return[iso(mon),iso(sun)];
+}
+const overlaps=(aF,aT,bF,bT)=>aF<=bT&&bF<=aT;
+const entryTime=e=>e.createdAt||parseInt(e.id,10)||0;
+
+// ---- Year select ----
+let curYear=TODAY.slice(0,4);
+function buildYearSelect(){
+  const set=new Set(data.map(yearOf).filter(Boolean));
+  set.add(TODAY.slice(0,4));
+  const ys=[...set].sort().reverse();
+  if(!ys.includes(curYear)) curYear=ys[0];
+  $("yearSelect").innerHTML=ys.map(y=>`<option value="${y}"${y===curYear?" selected":""}>${y}</option>`).join("");
+  $("yearLabel").textContent=curYear;
+}
+
+// ---- Filter ----
+function currentList(){
+  const q=$("searchInput").value.toLowerCase().trim();
+  const range=$("rangeSelect").value;
+  const[wF,wT]=weekBounds();
+  const mp=TODAY.slice(0,7);
+  return data.filter(e=>{
+    if(yearOf(e)!==curYear) return false;
+    if(filterType!=="all"&&e.type!==filterType) return false;
+    if(q){
+      const hay=[e.team,e.comment,e.relName,e.relLink,TYPES[e.type].label,e.updatedBy].join(" ").toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    if(range==="week") return overlaps(e.from||e.to,e.to||e.from,wF,wT);
+    if(range==="month") return(e.from||"").startsWith(mp)||(e.to||"").startsWith(mp);
+    if(range==="upcoming") return(e.to||e.from)>=TODAY;
+    return true;
+  });
+}
+function sortByType(arr,type){
+  const byEntry=(type==="regression"||type==="postcheck");
+  return arr.slice().sort(byEntry
+    ?(a,b)=>entryTime(a)-entryTime(b)
+    :(a,b)=>(a.from||"").localeCompare(b.from||""));
+}
+
+// ---- Render stats ----
+function renderStats(){
+  const yd=data.filter(e=>yearOf(e)===curYear);
+  const c={oncall:0,regression:0,postcheck:0};
+  yd.forEach(e=>c[e.type]!==undefined&&c[e.type]++);
+  const now=yd.filter(e=>e.type==="oncall"&&isActive(e));
+  const team=now.length?now.map(e=>e.team||"—").join(", "):"Nobody on call today";
+  const swap=now.map(e=>e.swap).filter(Boolean)[0]||"";
+  const primary=swap?"⇄ "+swap:team;
+  const sub=[];
+  if(swap) sub.push(team);
+  if(now.length) sub.push("until "+fmtDate(now[0].to));
+  else sub.push("no active on-call rota");
+  $("stats").innerHTML=`
+    <div class="stat"><div class="bar" style="background:#35c78e"></div>
+      <div class="k">📞 On Call now</div><div class="v" style="font-size:20px">${esc(primary)}</div>
+      <div class="s">${esc(sub.join(" · "))}</div></div>
+    <div class="stat"><div class="bar" style="background:var(--oncall)"></div>
+      <div class="k">QA on Call</div><div class="v">${c.oncall}</div><div class="s">entries in ${curYear}</div></div>
+    <div class="stat"><div class="bar" style="background:var(--regression)"></div>
+      <div class="k">Regression</div><div class="v">${c.regression}</div><div class="s">entries in ${curYear}</div></div>
+    <div class="stat"><div class="bar" style="background:var(--postcheck)"></div>
+      <div class="k">Post Checks</div><div class="v">${c.postcheck}</div><div class="s">entries in ${curYear}</div></div>`;
+}
+
+// ---- Render table ----
+function renderTable(){
+  const showRel=filterType!=="oncall";
+  const showSwap=filterType==="oncall";
+  const canEdit=(currentRole==="admin"||currentRole==="superadmin");
+  const cols=["Type","Status","Dates","QA Team"];
+  if(showRel) cols.push("Release","Notes");
+  if(showSwap) cols.push("Swap");
+  cols.push("Comment","");
+  $("theadRow").innerHTML=cols.map(c=>`<th>${c}</th>`).join("");
+  const list=currentList();
+  const hasAny=data.filter(e=>yearOf(e)===curYear).length>0;
+  $("emptyState").classList.toggle("hidden",list.length>0);
+  $("emptyMsg").innerHTML=hasAny?"No entries match your filters.":`No rota entries for ${curYear} yet.${canEdit?" Click <b>+ Add entry</b> to get started.":""}`;
+
+  const rowHtml=e=>{
+    const t=TYPES[e.type];
+    const dur=daysBetween(e.from,e.to);
+    const active=isActive(e);
+    const st=t.rel?WORK_STATUS[e.workStatus||"todo"]:STATUS[statusOf(e)];
+    let relCell="",noteCell="";
+    if(showRel){
+      if(t.rel){
+        relCell=e.relName||e.relLink
+          ?`<div class="rel-name">${esc(e.relName||"—")}</div>${e.relLink?`<a class="link" href="${escAttr(normUrl(e.relLink))}" target="_blank" rel="noopener noreferrer">Open ↗</a>`:""}`
+          :`<span class="dash">—</span>`;
+        noteCell=e.fileData
+          ?`<a class="file-chip" href="${e.fileData}" download="${escAttr(e.fileName)}">📄 ${esc(e.fileName)}</a>`
+          :`<span class="dash">—</span>`;
+      }else{
+        relCell=`<span class="dash">—</span>`;
+        noteCell=`<span class="dash">—</span>`;
       }
-      if (range === "week")     return overlaps(e.from||e.to, e.to||e.from, wF, wT);
-      if (range === "month")    return (e.from||"").startsWith(monthPrefix) || (e.to||"").startsWith(monthPrefix);
-      if (range === "upcoming") return (e.to||e.from) >= TODAY;
-      return true;
+    }
+    const audit=fmtAudit(e);
+    const dateCell=e.type==="postcheck"
+      ?`<div class="daterange">${fmtDate(e.from||e.to)}</div>`
+      :(e.from||e.to)?`<div class="daterange">${fmtDate(e.from)||"…"}<span class="to">→</span>${fmtDate(e.to)||"…"}</div>${dur?`<div class="dur">${dur} day${dur>1?"s":""}</div>`:""}`
+      :`<span class="dash">—</span>`;
+    return`<tr class="type-${e.type}${active?" active-row":""}">
+      <td><span class="badge ${t.cls}"><span class="d" style="background:${t.color}"></span>${t.short}</span></td>
+      <td><span class="status ${st.cls}"><span class="d"></span>${st.label}</span></td>
+      <td>${dateCell}</td>
+      <td class="team">${esc(e.team)||'<span class="dash">—</span>'}${(!showSwap&&e.type==="oncall"&&e.swap)?`<div class="swap-tag">⇄ ${esc(e.swap)}</div>`:""}</td>
+      ${showRel?`<td>${relCell}</td><td>${noteCell}</td>`:""}
+      ${showSwap?`<td>${e.swap?`<span class="swap-tag">⇄ ${esc(e.swap)}</span>`:'<span class="dash">—</span>'}</td>`:""}
+      <td><div class="cmt">${esc(e.comment)||'<span class="dash">—</span>'}</div>${audit?`<div class="audit">${esc(audit)}</div>`:""}</td>
+      <td><div class="row-actions">${canEdit?`<button class="ghost sm" data-edit="${e.id}">Edit</button>`:""}</div></td>
+    </tr>`;
+  };
+
+  const groupHeader=type=>{
+    const t=TYPES[type],n=list.filter(e=>e.type===type).length;
+    return`<tr class="group-row type-${type}"><td colspan="${cols.length}">
+      <span class="group-title" style="--gc:${t.color}"><span class="gd"></span>${t.label}</span>
+      <span class="group-count">${n} ${n===1?"entry":"entries"}</span></td></tr>`;
+  };
+
+  let html="";
+  if(filterType==="all"){
+    ["oncall","regression","postcheck"].forEach(type=>{
+      const group=sortByType(list.filter(e=>e.type===type),type);
+      if(!group.length) return;
+      html+=groupHeader(type)+group.map(rowHtml).join("");
     });
-    return list;
+  }else{
+    html=sortByType(list,filterType).map(rowHtml).join("");
   }
-  function sortByType(arr, type) {
-    const byEntry = (type === "regression" || type === "postcheck");
-    return arr.slice().sort(byEntry
-      ? (a,b) => entryTime(a) - entryTime(b)
-      : (a,b) => (a.from||"").localeCompare(b.from||""));
+  $("tbody").innerHTML=html;
+}
+
+function renderAll(){buildYearSelect();renderStats();renderTable();}
+
+// ---- Entry modal ----
+let modalType="oncall";
+function setModalType(type){
+  modalType=type;
+  document.querySelectorAll("#typePick .tp").forEach(el=>el.classList.toggle("sel",el.dataset.type===type));
+  $("relFields").classList.toggle("hidden",!TYPES[type].rel);
+  $("oncallFields").classList.toggle("hidden",type!=="oncall");
+  const isPost=type==="postcheck";
+  $("labelFrom").textContent=isPost?"Release date":"Date from";
+  $("toFieldWrap").classList.toggle("hidden",isPost);
+  if(isPost) $("fTo").value="";
+}
+function openModal(entry){
+  $("entryId").value=entry?entry.id:"";
+  $("modalTitle").textContent=entry?"Edit rota entry":"Add rota entry";
+  $("deleteBtn").classList.toggle("hidden",!entry);
+  setModalType(entry?entry.type:"oncall");
+  $("fFrom").value=entry?entry.from||"":TODAY;
+  $("fTo").value=entry?entry.to||"":TODAY;
+  $("fTeam").value=entry?entry.team||"":"";
+  $("fSwap").value=entry?entry.swap||"":"";
+  $("fWorkStatus").value=entry?entry.workStatus||"todo":"todo";
+  $("fRelName").value=entry?entry.relName||"":"";
+  $("fRelLink").value=entry?entry.relLink||"":"";
+  $("fComment").value=entry?entry.comment||"":"";
+  curFileData=entry?entry.fileData||null:null;
+  curFileName=entry?entry.fileName||null:null;
+  updateFileUI();
+  $("modalBg").classList.add("show");
+  $("fTeam").focus();
+}
+function closeModal(){$("modalBg").classList.remove("show");$("fFile").value="";}
+function updateFileUI(){
+  $("curFile").textContent=curFileName?curFileName:"No file attached";
+  $("clearFileBtn").classList.toggle("hidden",!curFileName);
+}
+function saveEntry(){
+  const from=$("fFrom").value, to=modalType==="postcheck"?"":$("fTo").value;
+  if(modalType==="oncall"&&(!from||!to)){toast("Please set both dates for On Call");return;}
+  if(modalType!=="postcheck"&&from&&to&&from>to){toast("'Date from' must be before 'Date to'");return;}
+  const id=$("entryId").value;
+  const prev=id?data.find(e=>e.id===id):null;
+  const entry={
+    id:id||String(Date.now())+Math.random().toString(36).slice(2,6),
+    createdAt:prev?(prev.createdAt||entryTime(prev)):Date.now(),
+    type:modalType,from,to,
+    team:$("fTeam").value.trim(),
+    swap:modalType==="oncall"?$("fSwap").value.trim():"",
+    comment:$("fComment").value.trim(),
+    workStatus:TYPES[modalType].rel?$("fWorkStatus").value:null,
+    relName:TYPES[modalType].rel?$("fRelName").value.trim():"",
+    relLink:TYPES[modalType].rel?$("fRelLink").value.trim():"",
+    fileName:TYPES[modalType].rel?curFileName:null,
+    fileData:TYPES[modalType].rel?curFileData:null,
+  };
+  if(id){const i=data.findIndex(e=>e.id===id);if(i>-1)data[i]=entry;}
+  else data.unshift(entry);
+  curYear=yearOf(entry)||curYear;
+  save();renderAll();closeModal();toast("Saved ✓");
+}
+function deleteEntry(){
+  const id=$("entryId").value;if(!id)return;
+  if(confirm("Delete this rota entry?")){
+    data=data.filter(e=>e.id!==id);
+    save();renderAll();closeModal();toast("Deleted");
   }
+}
 
-  function renderStats() {
-    const yearData = data.filter(e => yearOf(e) === curYear);
-    const counts = { oncall:0, regression:0, postcheck:0 };
-    yearData.forEach(e => counts[e.type]!==undefined && counts[e.type]++);
-    const onCallNow = yearData.filter(e => e.type==="oncall" && isActive(e));
-    const onCallTeam = onCallNow.length ? onCallNow.map(e=>e.team||"—").join(", ") : "Nobody on call today";
-    const swapNote = onCallNow.map(e=>e.swap).filter(Boolean)[0] || "";
-    const primary = swapNote ? "⇄ "+swapNote : onCallTeam;
-    const subParts = [];
-    if (swapNote) subParts.push(onCallTeam);
-    if (onCallNow.length) subParts.push("until "+fmtDate(onCallNow[0].to));
-    else subParts.push("no active on-call rota");
-    $("stats").innerHTML = `
-      <div class="stat"><div class="bar" style="background:#35c78e"></div>
-        <div class="k">📞 On Call now</div><div class="v" style="font-size:20px">${esc(primary)}</div>
-        <div class="s">${esc(subParts.join(" · "))}</div></div>
-      <div class="stat"><div class="bar" style="background:var(--oncall)"></div>
-        <div class="k">QA on Call</div><div class="v">${counts.oncall}</div><div class="s">entries in ${curYear}</div></div>
-      <div class="stat"><div class="bar" style="background:var(--regression)"></div>
-        <div class="k">Regression</div><div class="v">${counts.regression}</div><div class="s">entries in ${curYear}</div></div>
-      <div class="stat"><div class="bar" style="background:var(--postcheck)"></div>
-        <div class="k">Post Checks</div><div class="v">${counts.postcheck}</div><div class="s">entries in ${curYear}</div></div>`;
-  }
+$("addBtn").onclick=()=>openModal(null);
+$("cancelBtn").onclick=closeModal;
+$("saveBtn").onclick=saveEntry;
+$("deleteBtn").onclick=deleteEntry;
+$("modalBg").onclick=e=>{if(e.target===$("modalBg"))closeModal();};
+document.querySelectorAll("#typePick .tp").forEach(el=>el.onclick=()=>setModalType(el.dataset.type));
+$("pickFileBtn").onclick=()=>$("fFile").click();
+$("fFile").onchange=e=>{if(e.target.files[0])attachFile(e.target.files[0]);};
+$("clearFileBtn").onclick=()=>{curFileData=null;curFileName=null;$("fFile").value="";updateFileUI();};
+document.querySelectorAll("#tabs .tab").forEach(tab=>tab.onclick=()=>{
+  document.querySelectorAll("#tabs .tab").forEach(t=>t.classList.remove("active"));
+  tab.classList.add("active");filterType=tab.dataset.type;renderTable();
+});
+$("yearSelect").onchange=e=>{curYear=e.target.value;$("yearLabel").textContent=curYear;renderStats();renderTable();};
+$("rangeSelect").onchange=renderTable;
+$("searchInput").oninput=renderTable;
+$("tbody").addEventListener("click",e=>{
+  const btn=e.target.closest("[data-edit]");
+  if(btn) openModal(data.find(x=>x.id===btn.dataset.edit));
+});
 
-  function renderTable() {
-    const showRel = filterType !== "oncall";
-    const showSwap = filterType === "oncall";
-    const cols = ["Type","Status","Dates","QA Team"];
-    if (showRel) cols.push("Release","Notes");
-    if (showSwap) cols.push("Swap");
-    cols.push("Comment","");
-    $("theadRow").innerHTML = cols.map(c=>`<th>${c}</th>`).join("");
+function exportData(){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download=`qa-rota-${curYear}.json`;a.click();
+  toast("Exported ✓");
+}
+function importData(file){
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const parsed=JSON.parse(r.result);
+      if(!Array.isArray(parsed))throw 0;
+      if(data.length&&!confirm("Import will merge with existing entries. Continue?"))return;
+      const ids=new Set(data.map(e=>e.id));
+      parsed.forEach(e=>{if(e&&e.id&&!ids.has(e.id))data.push(e);});
+      save();renderAll();toast(`Imported ${parsed.length} entries`);
+    }catch{toast("Invalid file");}
+  };
+  r.readAsText(file);
+}
+function attachFile(file){
+  if(file.size>3*1024*1024){toast("File too large (max ~3 MB)");return;}
+  const r=new FileReader();
+  r.onload=()=>{curFileData=r.result;curFileName=file.name;updateFileUI();};
+  r.readAsDataURL(file);
+}
+$("exportBtn").onclick=exportData;
+$("importBtn").onclick=()=>$("importFile").click();
+$("importFile").onchange=e=>{if(e.target.files[0])importData(e.target.files[0]);e.target.value="";};
 
-    const list = currentList();
-    const tbody = $("tbody");
-    const hasAny = data.filter(e=>yearOf(e)===curYear).length > 0;
-    $("emptyState").classList.toggle("hidden", list.length > 0);
-    $("emptyMsg").innerHTML = hasAny
-      ? "No entries match your filters."
-      : `No rota entries for ${curYear} yet. Click <b>+ Add rota entry</b> to get started.`;
+// ---- Manage Users ----
+async function loadUsers(){
+  try{
+    const res=await fetch("/api/users",{cache:"no-store"});
+    if(!res.ok) return[];
+    return await res.json();
+  }catch{return[];}
+}
 
-    const rowHtml = e => {
-      const t = TYPES[e.type];
-      const dur = daysBetween(e.from,e.to);
-      const active = isActive(e);
-      const st = t.rel ? WORK_STATUS[e.workStatus||"todo"] : STATUS[statusOf(e)];
-      let relCell = "", noteCell = "";
-      if (showRel) {
-        if (t.rel) {
-          relCell = e.relName || e.relLink
-            ? `<div class="rel-name">${esc(e.relName||"—")}</div>${e.relLink?`<a class="link" href="${escAttr(normUrl(e.relLink))}" target="_blank" rel="noopener noreferrer">Open link ↗</a>`:""}`
-            : `<span class="dash">—</span>`;
-          noteCell = e.fileData
-            ? `<a class="file-chip" href="${e.fileData}" download="${escAttr(e.fileName)}">📄 ${esc(e.fileName)}</a>`
-            : `<span class="dash">—</span>`;
-        } else {
-          relCell = `<span class="dash">—</span>`;
-          noteCell = `<span class="dash">—</span>`;
-        }
-      }
-      return `<tr class="type-${e.type} ${active?"active-row":""}">
-        <td><span class="badge ${t.cls}"><span class="d" style="background:${t.color}"></span>${t.short}</span></td>
-        <td><span class="status ${st.cls}"><span class="d"></span>${st.label}</span></td>
-        <td>${(e.from||e.to)
-            ? e.type === "postcheck"
-              ? `<div class="daterange">${fmtDate(e.from||e.to)}</div>`
-              : `<div class="daterange">${fmtDate(e.from)||'…'}<span class="to">→</span>${fmtDate(e.to)||'…'}</div>${dur?`<div class="dur">${dur} day${dur>1?"s":""}</div>`:""}`
-            : '<span class="dash">—</span>'}</td>
-        <td class="team">${esc(e.team)||'<span class="dash">—</span>'}${(!showSwap && e.type==="oncall" && e.swap)?`<div class="swap-tag">⇄ ${esc(e.swap)}</div>`:""}</td>
-        ${showRel?`<td>${relCell}</td><td>${noteCell}</td>`:""}
-        ${showSwap?`<td>${e.swap?`<span class="swap-tag">⇄ ${esc(e.swap)}</span>`:'<span class="dash">—</span>'}</td>`:""}
-        <td><div class="cmt">${esc(e.comment)||'<span class="dash">—</span>'}</div></td>
-        <td><div class="row-actions"><button class="ghost sm" data-edit="${e.id}">Edit</button></div></td>
-      </tr>`;
-    };
-
-    const groupHeader = type => {
-      const t = TYPES[type], n = list.filter(e=>e.type===type).length;
-      return `<tr class="group-row type-${type}"><td colspan="${cols.length}">
-        <span class="group-title" style="--gc:${t.color}"><span class="gd"></span>${t.label}</span>
-        <span class="group-count">${n} ${n===1?"entry":"entries"}</span></td></tr>`;
-    };
-
-    let html = "";
-    if (filterType === "all") {
-      ["oncall","regression","postcheck"].forEach(type => {
-        const group = sortByType(list.filter(e=>e.type===type), type);
-        if (!group.length) return;
-        html += groupHeader(type) + group.map(rowHtml).join("");
-      });
-    } else {
-      html = sortByType(list, filterType).map(rowHtml).join("");
-    }
-    tbody.innerHTML = html;
-  }
-
-  function renderAll() { buildYearSelect(); renderStats(); renderTable(); }
-
-  let modalType = "oncall";
-  function setModalType(type) {
-    modalType = type;
-    document.querySelectorAll("#typePick .tp").forEach(el => el.classList.toggle("sel", el.dataset.type===type));
-    $("relFields").classList.toggle("hidden", !TYPES[type].rel);
-    $("oncallFields").classList.toggle("hidden", type !== "oncall");
-    // Post Checks: only a single release date, no "to" date
-    const isPostcheck = type === "postcheck";
-    $("labelFrom").textContent = isPostcheck ? "Release date" : "Date from";
-    $("toFieldWrap").classList.toggle("hidden", isPostcheck);
-    if (isPostcheck) $("fTo").value = "";
-  }
-  function openModal(entry) {
-    $("entryId").value = entry ? entry.id : "";
-    $("modalTitle").textContent = entry ? "Edit rota entry" : "Add rota entry";
-    $("deleteBtn").classList.toggle("hidden", !entry);
-    setModalType(entry ? entry.type : "oncall");
-    $("fFrom").value = entry ? entry.from||"" : TODAY;
-    $("fTo").value = entry ? entry.to||"" : TODAY;
-    $("fTeam").value = entry ? entry.team||"" : "";
-    $("fSwap").value = entry ? entry.swap||"" : "";
-    $("fWorkStatus").value = entry ? entry.workStatus||"todo" : "todo";
-    $("fRelName").value = entry ? entry.relName||"" : "";
-    $("fRelLink").value = entry ? entry.relLink||"" : "";
-    $("fComment").value = entry ? entry.comment||"" : "";
-    curFileData = entry ? entry.fileData||null : null;
-    curFileName = entry ? entry.fileName||null : null;
-    updateFileUI();
-    $("modalBg").classList.add("show");
-    $("fTeam").focus();
-  }
-  function closeModal() { $("modalBg").classList.remove("show"); $("fFile").value=""; }
-
-  function updateFileUI() {
-    $("curFile").textContent = curFileName ? curFileName : "No file attached";
-    $("clearFileBtn").classList.toggle("hidden", !curFileName);
-  }
-
-  function saveEntry() {
-    const from = $("fFrom").value, to = modalType === "postcheck" ? "" : $("fTo").value;
-    if (modalType === "oncall" && (!from || !to)) { toast("Please set both dates for On Call"); return; }
-    if (modalType !== "postcheck" && from && to && from > to) { toast("'Date from' must be before 'Date to'"); return; }
-    const id = $("entryId").value;
-    const prev = id ? data.find(e=>e.id===id) : null;
-    const entry = {
-      id: id || String(Date.now())+Math.random().toString(36).slice(2,6),
-      createdAt: prev ? (prev.createdAt || entryTime(prev)) : Date.now(),
-      type: modalType, from, to,
-      team: $("fTeam").value.trim(),
-      swap: modalType === "oncall" ? $("fSwap").value.trim() : "",
-      comment: $("fComment").value.trim(),
-      workStatus: TYPES[modalType].rel ? $("fWorkStatus").value : null,
-      relName: TYPES[modalType].rel ? $("fRelName").value.trim() : "",
-      relLink: TYPES[modalType].rel ? $("fRelLink").value.trim() : "",
-      fileName: TYPES[modalType].rel ? curFileName : null,
-      fileData: TYPES[modalType].rel ? curFileData : null,
-    };
-    if (id) { const i = data.findIndex(e=>e.id===id); if (i>-1) data[i]=entry; }
-    else data.unshift(entry);
-    curYear = yearOf(entry) || curYear;
-    save(); renderAll(); closeModal(); toast("Saved ✓");
-  }
-
-  function deleteEntry() {
-    const id = $("entryId").value;
-    if (!id) return;
-    if (confirm("Delete this rota entry?")) {
-      data = data.filter(e=>e.id!==id);
-      save(); renderAll(); closeModal(); toast("Deleted");
-    }
-  }
-
-  function exportData() {
-    const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `qa-rota-${curYear}.json`;
-    a.click();
-    toast("Exported ✓");
-  }
-  function importData(file) {
-    const r = new FileReader();
-    r.onload = () => {
-      try {
-        const parsed = JSON.parse(r.result);
-        if (!Array.isArray(parsed)) throw 0;
-        if (data.length && !confirm("Import will merge with existing entries. Continue?")) return;
-        const ids = new Set(data.map(e=>e.id));
-        parsed.forEach(e => { if (e && e.id && !ids.has(e.id)) data.push(e); });
-        save(); renderAll(); toast(`Imported ${parsed.length} entries`);
-      } catch { toast("Invalid file"); }
-    };
-    r.readAsText(file);
-  }
-
-  function attachFile(file) {
-    if (file.size > 3*1024*1024) { toast("File too large (max ~3 MB)"); return; }
-    const r = new FileReader();
-    r.onload = () => { curFileData = r.result; curFileName = file.name; updateFileUI(); };
-    r.readAsDataURL(file);
-  }
-
-  let toastTimer;
-  function toast(msg) {
-    const t=$("toast"); t.textContent=msg; t.classList.add("show");
-    clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove("show"),1900);
-  }
-
-  $("addBtn").onclick = () => openModal(null);
-  $("cancelBtn").onclick = closeModal;
-  $("saveBtn").onclick = saveEntry;
-  $("deleteBtn").onclick = deleteEntry;
-  $("modalBg").onclick = e => { if (e.target===$("modalBg")) closeModal(); };
-  document.querySelectorAll("#typePick .tp").forEach(el => el.onclick = () => setModalType(el.dataset.type));
-  $("pickFileBtn").onclick = () => $("fFile").click();
-  $("fFile").onchange = e => { if (e.target.files[0]) attachFile(e.target.files[0]); };
-  $("clearFileBtn").onclick = () => { curFileData=null; curFileName=null; $("fFile").value=""; updateFileUI(); };
-
-  document.querySelectorAll("#tabs .tab").forEach(tab => tab.onclick = () => {
-    document.querySelectorAll("#tabs .tab").forEach(t=>t.classList.remove("active"));
-    tab.classList.add("active"); filterType = tab.dataset.type; renderTable();
+async function openUsersPanel(){
+  $("nuUser").value="";$("nuPass").value="";$("nuRole").value="viewer";$("nuMsg").textContent="";
+  const users=await loadUsers();
+  const superLabel=`<span class="role-pill role-superadmin">Super Admin</span>`;
+  let rows=`<div style="font-size:12px;color:var(--muted);margin-bottom:4px">Current users</div>`;
+  rows+=`<table class="users-table"><thead><tr><th>Username</th><th>Role</th><th></th></tr></thead><tbody>`;
+  rows+=`<tr><td><strong>israa</strong></td><td>${superLabel}</td><td></td></tr>`;
+  users.forEach(u=>{
+    const roleCls=u.role==="admin"?"role-admin":"role-viewer";
+    rows+=`<tr>
+      <td>${esc(u.username)}</td>
+      <td><span class="role-pill ${roleCls}">${u.role}</span></td>
+      <td style="text-align:right">
+        <button class="ghost sm" data-promote="${esc(u.username)}" data-role="${u.role==="admin"?"viewer":"admin"}" style="font-size:11px">
+          ${u.role==="admin"?"→ Viewer":"→ Admin"}
+        </button>
+        <button class="ghost sm" data-remove="${esc(u.username)}" style="font-size:11px;color:#e5646d;margin-left:4px">Remove</button>
+      </td>
+    </tr>`;
   });
-  $("yearSelect").onchange = e => { curYear = e.target.value; $("yearLabel").textContent=curYear; renderStats(); renderTable(); };
-  $("rangeSelect").onchange = renderTable;
-  $("searchInput").oninput = renderTable;
-  $("exportBtn").onclick = exportData;
-  $("importBtn").onclick = () => $("importFile").click();
-  $("importFile").onchange = e => { if (e.target.files[0]) importData(e.target.files[0]); e.target.value=""; };
-  $("tbody").addEventListener("click", e => {
-    const btn = e.target.closest("[data-edit]");
-    if (btn) openModal(data.find(x=>x.id===btn.dataset.edit));
+  rows+=`</tbody></table>`;
+  $("usersList").innerHTML=rows;
+  $("usersMg").classList.add("show");
+}
+
+$("manageUsersBtn").onclick=openUsersPanel;
+$("closeUsersBtn").onclick=()=>$("usersMg").classList.remove("show");
+$("usersMg").onclick=e=>{if(e.target===$("usersMg"))$("usersMg").classList.remove("show");};
+
+$("usersList").addEventListener("click",async e=>{
+  const promoteBtn=e.target.closest("[data-promote]");
+  const removeBtn=e.target.closest("[data-remove]");
+  if(promoteBtn){
+    const username=promoteBtn.dataset.promote;
+    const newRole=promoteBtn.dataset.role;
+    const res=await fetch(`/api/users/${encodeURIComponent(username)}`,{
+      method:"PATCH",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({role:newRole})
+    });
+    if(res.ok){toast(`${username} is now ${newRole}`);openUsersPanel();}
+    else toast("Couldn't update user");
+  }
+  if(removeBtn){
+    const username=removeBtn.dataset.remove;
+    if(!confirm(`Remove user "${username}"?`)) return;
+    const res=await fetch(`/api/users/${encodeURIComponent(username)}`,{method:"DELETE"});
+    if(res.ok){toast(`${username} removed`);openUsersPanel();}
+    else toast("Couldn't remove user");
+  }
+});
+
+$("addUserBtn").onclick=async()=>{
+  const username=$("nuUser").value.trim();
+  const password=$("nuPass").value;
+  const role=$("nuRole").value;
+  $("nuMsg").textContent="";
+  if(!username){$("nuMsg").textContent="Enter a username.";return;}
+  if(!password){$("nuMsg").textContent="Enter a password.";return;}
+  const res=await fetch("/api/users",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({username,password,role})
   });
-
-  async function reload() {
-    if (!store) return;
-    try { data = await store.read(); renderAll(); }
-    catch (e) { toast("Couldn't load: " + (e && e.message ? e.message : "error")); }
+  const body=await res.json().catch(()=>({}));
+  if(!res.ok){
+    const msgs={username_taken:"That username is already taken.",username_reserved:"That username is reserved.",password_required:"Password is required.",invalid_role:"Invalid role."};
+    $("nuMsg").textContent=msgs[body.error]||"Couldn't create user.";return;
   }
-  $("refreshBtn").onclick = () => { reload(); toast("Reloaded"); };
-  // when you come back to the tab, pull any changes teammates made
-  window.addEventListener("focus", () => { if (store && store.mode === "shared") reload(); });
+  toast(`User "${username}" added`);openUsersPanel();
+};
 
-  // ---- lock screen ----
-  function showLock(msg) {
-    $("lockMsg").textContent = msg || "";
-    $("lockScreen").classList.add("show");
-    $("lockPass").value = "";
-    setTimeout(() => $("lockPass").focus(), 60);
+// ---- Login ----
+function showLock(msg){
+  $("lockMsg").textContent=msg||"";
+  $("lockScreen").classList.add("show");
+  $("lockUser").value="";$("lockPass").value="";
+  setTimeout(()=>$("lockUser").focus(),60);
+}
+function hideLock(){$("lockScreen").classList.remove("show");}
+
+async function signIn(){
+  const username=$("lockUser").value.trim();
+  const password=$("lockPass").value;
+  if(!username){$("lockMsg").textContent="Enter your username.";return;}
+  if(!password){$("lockMsg").textContent="Enter your password.";return;}
+  $("lockBtn").disabled=true;$("lockMsg").textContent="Signing in…";
+  try{
+    const res=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({username,password})});
+    if(res.status===401){$("lockMsg").textContent="Wrong username or password.";return;}
+    if(!res.ok){$("lockMsg").textContent="Couldn't sign in ("+res.status+").";return;}
+    const body=await res.json();
+    hideLock();
+    applyRole(body.username,body.role);
+    await loadRota();
+  }catch(e){
+    $("lockMsg").textContent="Network error — "+(e&&e.message?e.message:"try again");
+  }finally{$("lockBtn").disabled=false;}
+}
+$("lockBtn").onclick=signIn;
+$("lockPass").addEventListener("keydown",e=>{if(e.key==="Enter")signIn();});
+$("lockUser").addEventListener("keydown",e=>{if(e.key==="Enter")$("lockPass").focus();});
+
+$("signOutBtn").onclick=async()=>{
+  await fetch("/api/login",{method:"DELETE"});
+  location.reload();
+};
+
+// ---- Reload ----
+async function loadRota(){
+  store=sharedStore();
+  showBadge();
+  try{data=await store.read();}catch{data=[];}
+  renderAll();
+}
+$("refreshBtn").onclick=async()=>{await loadRota();toast("Reloaded");};
+window.addEventListener("focus",()=>{if(store&&store.mode==="shared")loadRota();});
+
+// ---- Toast ----
+let toastTimer;
+function toast(msg){
+  const t=$("toast");t.textContent=msg;t.classList.add("show");
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+// ---- Boot ----
+async function boot(){
+  const state=await probeApi();
+  if(state==="locked"){showLock();return;}
+  if(state==="unconfigured"){
+    $("storeHelp").innerHTML="This deployment isn't configured yet — set <b>SUPER_ADMIN_PASSWORD</b> in Vercel → Settings → Environment Variables.";
+    return;
   }
-  function hideLock() { $("lockScreen").classList.remove("show"); }
-
-  async function signIn() {
-    const password = $("lockPass").value;
-    if (!password) { $("lockMsg").textContent = "Enter the team password."; return; }
-    $("lockBtn").disabled = true;
-    $("lockMsg").textContent = "Checking…";
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password })
-      });
-      if (res.status === 401) { $("lockMsg").textContent = "That password didn't work."; return; }
-      if (!res.ok) { $("lockMsg").textContent = "Couldn't sign in (" + res.status + ")."; return; }
-      hideLock();
-      await boot();
-    } catch (e) {
-      $("lockMsg").textContent = "Network error — " + (e && e.message ? e.message : "try again");
-    } finally {
-      $("lockBtn").disabled = false;
-    }
-  }
-  $("lockBtn").onclick = signIn;
-  $("lockPass").addEventListener("keydown", e => { if (e.key === "Enter") signIn(); });
-
-  // ---- startup ----
-  async function boot() {
-    const state = await probeApi();
-
-    if (state === "locked") { showLock(); return; }
-
-    if (state === "unconfigured") {
-      store = localStore("this deployment has no password or storage set yet");
-      showBadge();
-      $("storeHelp").innerHTML = "This deployment isn't finished — its <b>ROTA_PASSWORD</b> and Redis store aren't set in Vercel yet, so there's nothing shared to connect to.";
-      $("storeDiag").textContent = "Storage: deployment not configured (see /api/health)";
-      data = await store.read();
-      renderAll();
+  // Already authed — check session for role
+  try{
+    const res=await fetch("/api/login",{cache:"no-store"});
+    const b=await res.json().catch(()=>({}));
+    if(b.authed&&b.username&&b.role){
+      applyRole(b.username,b.role);
+      await loadRota();
       return;
     }
+  }catch{}
+  showLock();
+}
 
-    store = state === "ok" ? sharedStore() : localStore("shared rota not reachable");
-    showBadge();
-    $("storeHelp").innerHTML = store.mode === "shared"
-      ? "This rota is <b>shared</b> — everyone with the link and the team password sees and edits the same data. Click <b>↻ Refresh</b> to pull the latest."
-      : "This copy is <b>saved in your browser only</b>. Use <b>Export</b> to back up / share a file, and <b>Import</b> to load it elsewhere.";
-    $("storeDiag").textContent = "Storage: " + store.diag;
-    try { data = await store.read(); } catch { data = []; }
-    renderAll();
-  }
-
-  boot();
+boot();
 })();
 </script>
-
 </body>
 </html>

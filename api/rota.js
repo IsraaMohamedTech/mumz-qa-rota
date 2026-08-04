@@ -1,24 +1,26 @@
-// GET  /api/rota  -> { version, entries }
-// PUT  /api/rota  -> save. Body is either a bare array (forced write, used by
-//                   Import) or { version, entries } for a safe write that is
-//                   rejected with 409 if someone else saved first.
+// GET  /api/rota  -> { version, entries, role, username }
+// PUT  /api/rota  -> save entries (admin/superadmin only)
+//   On write, stamps each changed entry with updatedBy + updatedAt.
 import { guard, readRota, writeRota } from "./_lib.js";
 
 export default async function handler(req, res) {
-  if (!guard(req, res)) return;
+  const session = guard(req, res);
+  if (!session) return;
   res.setHeader("Cache-Control", "no-store");
 
   try {
     if (req.method === "GET") {
       const { version, entries } = await readRota();
-      return res.status(200).json({ version, entries });
+      return res.status(200).json({ version, entries, role: session.role, username: session.username });
     }
 
     if (req.method === "PUT" || req.method === "POST") {
-      const body = typeof req.body === "string" ? JSON.parse(req.body || "null") : req.body;
+      // Viewers cannot write
+      if (session.role === "viewer") {
+        return res.status(403).json({ error: "forbidden", detail: "Viewers cannot edit the rota." });
+      }
 
-      // A bare array means "overwrite whatever is there" — Import, or an older
-      // dashboard that predates versioning.
+      const body    = typeof req.body === "string" ? JSON.parse(req.body || "null") : req.body;
       const entries = Array.isArray(body) ? body : body?.entries;
       const expected = Array.isArray(body) ? null : body?.version;
 
@@ -26,18 +28,26 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "expected a JSON array, or { version, entries }" });
       }
 
-      const version = await writeRota(entries, expected === undefined ? null : expected);
+      // Stamp each entry with who saved it and when
+      const now = new Date().toISOString();
+      const stamped = entries.map(e => ({
+        ...e,
+        updatedBy: session.username,
+        updatedAt: now,
+      }));
+
+      const version = await writeRota(stamped, expected === undefined ? null : expected);
 
       if (version === -1) {
         const current = await readRota();
         return res.status(409).json({
-          error: "conflict",
-          detail: "Someone else saved changes since you loaded the page.",
+          error:   "conflict",
+          detail:  "Someone else saved changes since you loaded the page.",
           version: current.version,
           entries: current.entries,
         });
       }
-      return res.status(200).json({ ok: true, count: entries.length, version });
+      return res.status(200).json({ ok: true, count: stamped.length, version });
     }
 
     return res.status(405).json({ error: "method not allowed" });
