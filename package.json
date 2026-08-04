@@ -1,0 +1,13 @@
+{
+  "name": "mumz-qa-rota",
+  "version": "2.0.0",
+  "description": "Mumzworld QA Rota — shared on-call / regression / post-checks dashboard. Vercel functions + Upstash Redis, no npm dependencies.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "seed": "node scripts/seed.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
