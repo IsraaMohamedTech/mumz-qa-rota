@@ -1,7 +1,17 @@
 // GET  /api/rota  -> { version, entries, role, username }
 // PUT  /api/rota  -> save entries (admin/superadmin only)
-//   On write, stamps each changed entry with updatedBy + updatedAt.
+//   On write, stamps ONLY the entries that actually changed with updatedBy +
+//   updatedAt. The dashboard PUTs the whole array on every save, so stamping
+//   everything would rewrite every row's "last updated" note on each edit.
 import { guard, readRota, writeRota } from "./_lib.js";
+
+// Compare two entries ignoring the audit stamp itself, so re-sending an
+// untouched entry is not mistaken for an edit.
+const STAMP_FIELDS = new Set(["updatedBy", "updatedAt"]);
+function fingerprint(entry) {
+  const keys = Object.keys(entry || {}).filter((k) => !STAMP_FIELDS.has(k)).sort();
+  return JSON.stringify(keys.map((k) => [k, entry[k]]));
+}
 
 export default async function handler(req, res) {
   const session = guard(req, res);
@@ -28,21 +38,27 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "expected a JSON array, or { version, entries }" });
       }
 
+      // Read the stored rota once — needed both for the delete check and to
+      // work out which entries the caller actually changed.
+      const current = await readRota();
+
       // Only superadmin can delete entries (i.e. send fewer entries than currently stored)
-      if (session.role !== "superadmin" && expected !== null) {
-        const current = await readRota();
-        if (entries.length < current.entries.length) {
-          return res.status(403).json({ error: "forbidden", detail: "Only the super admin can delete rota entries." });
-        }
+      if (session.role !== "superadmin" && expected !== null
+          && entries.length < current.entries.length) {
+        return res.status(403).json({ error: "forbidden", detail: "Only the super admin can delete rota entries." });
       }
 
-      // Stamp each entry with who saved it and when
+      // Stamp only what changed. An untouched entry keeps the stamp it already
+      // had, so "who updated this and when" stays true per row.
       const now = new Date().toISOString();
-      const stamped = entries.map(e => ({
-        ...e,
-        updatedBy: session.username,
-        updatedAt: now,
-      }));
+      const previous = new Map(current.entries.map((e) => [e.id, e]));
+      const stamped = entries.map((e) => {
+        const prev = e.id ? previous.get(e.id) : null;
+        if (prev && fingerprint(prev) === fingerprint(e)) {
+          return { ...e, updatedBy: prev.updatedBy, updatedAt: prev.updatedAt };
+        }
+        return { ...e, updatedBy: session.username, updatedAt: now };
+      });
 
       const version = await writeRota(stamped, expected === undefined ? null : expected);
 
