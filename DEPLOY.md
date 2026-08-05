@@ -51,6 +51,19 @@ returns 503 rather than serving the rota unprotected.
 
 ## Step 4 — deploy
 
+The project is connected to `github.com/IsraaMohamedTech/mumz-qa-rota`, so
+**pushing to `main` deploys to production automatically** — no command needed:
+
+```
+git push origin main
+```
+
+Other branches get their own preview URL instead, which is the safe way to try
+something without touching what the team is using.
+
+To deploy without pushing (or to redeploy after only changing an environment
+variable, which does *not* trigger a build on its own):
+
 ```
 vercel --prod
 ```
