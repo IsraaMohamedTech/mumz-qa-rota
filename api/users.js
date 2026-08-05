@@ -65,10 +65,19 @@ export default async function handler(req, res) {
 
   if (req.method === "PATCH") {
     if (!targetUser) return res.status(400).json({ error: "username required in URL" });
+    // The super admin isn't a Redis user, so there is nothing here to edit —
+    // say so plainly instead of returning a confusing "not_found".
+    const superAdmin = (process.env.SUPER_ADMIN_USERNAME || "israa").toLowerCase();
+    if (targetUser.trim().toLowerCase() === superAdmin) {
+      return res.status(400).json({
+        error: "superadmin_use_env",
+        detail: "The super admin's username and password are Vercel environment variables, not stored users.",
+      });
+    }
     const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
     const result = await updateUser(targetUser, body);
     if (!result.ok) return res.status(400).json({ error: result.error });
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ ok: true, username: result.username });
   }
 
   if (req.method === "DELETE") {

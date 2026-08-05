@@ -127,21 +127,42 @@ export async function createUser(username, password, role) {
   return { ok: true };
 }
 
-/** Update a user's role or password. Returns { ok, error }. */
+/**
+ * Update a user's username, role and/or password.
+ * Returns { ok, error, username } — username is the name after any rename.
+ */
 export async function updateUser(username, updates) {
   const users = await readUsers();
   const name = (username || "").trim().toLowerCase();
   const idx = users.findIndex(u => u.username === name);
   if (idx === -1) return { ok: false, error: "not_found" };
+
   if (updates.role) {
     if (updates.role !== "admin" && updates.role !== "viewer") return { ok: false, error: "invalid_role" };
     users[idx].role = updates.role;
   }
+
   if (updates.password) {
+    // Same floor as the self-service change, so a super-admin reset can't set a
+    // weaker password than the user could set themselves.
+    if (String(updates.password).length < 6) return { ok: false, error: "password_too_short" };
     users[idx].passwordHash = hashPassword(updates.password);
   }
+
+  // Rename. Session cookies carry the username, so a renamed user's existing
+  // session points at a name that no longer exists — they must sign in again.
+  if (updates.username !== undefined) {
+    const next = String(updates.username).trim().toLowerCase();
+    if (!next) return { ok: false, error: "username_required" };
+    if (!/^[a-z0-9._-]{2,32}$/.test(next)) return { ok: false, error: "invalid_username" };
+    const superAdmin = (process.env.SUPER_ADMIN_USERNAME || "israa").toLowerCase();
+    if (next === superAdmin) return { ok: false, error: "username_reserved" };
+    if (next !== name && users.some(u => u.username === next)) return { ok: false, error: "username_taken" };
+    users[idx].username = next;
+  }
+
   await writeUsers(users);
-  return { ok: true };
+  return { ok: true, username: users[idx].username };
 }
 
 /** Delete a user. Returns { ok, error }. */

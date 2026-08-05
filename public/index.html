@@ -388,6 +388,23 @@
   </div>
 </div>
 
+<!-- Super admin edits one stored user: rename and/or set a new password. -->
+<div class="modal-bg" id="userEditMg" style="z-index:70">
+  <div class="modal" style="max-width:400px">
+    <h3>Edit user</h3>
+    <div class="sub" id="ueSub"></div>
+    <label for="ueUser">Username</label>
+    <input type="text" id="ueUser" autocomplete="off" placeholder="username">
+    <label for="uePass">New password <span style="color:var(--faint);font-weight:400">(optional)</span></label>
+    <input type="password" id="uePass" autocomplete="new-password" placeholder="Leave blank to keep current">
+    <div id="ueMsg" style="font-size:12.5px;margin-top:10px;min-height:16px"></div>
+    <div class="modal-actions" style="margin-top:12px">
+      <button class="ghost" id="ueCancelBtn">Cancel</button>
+      <button class="primary" id="ueSaveBtn">Save changes</button>
+    </div>
+  </div>
+</div>
+
 <!-- Change your own password. Super admins don't see this: their password comes
      from a Vercel env var, so the API refuses to change it here. -->
 <div class="modal-bg" id="changePassMg" style="z-index:70">
@@ -851,13 +868,16 @@ async function openUsersPanel(){
   const superLabel=`<span class="role-pill role-superadmin">Super Admin</span>`;
   let rows=`<div style="font-size:12px;color:var(--muted);margin-bottom:4px">Current users</div>`;
   rows+=`<table class="users-table"><thead><tr><th>Username</th><th>Role</th><th></th></tr></thead><tbody>`;
-  rows+=`<tr><td><strong>israa</strong></td><td>${superLabel}</td><td></td></tr>`;
+  // The super admin's name comes from an env var, so read it off the session
+  // rather than hard-coding it — otherwise this row lies if the var changes.
+  rows+=`<tr><td><strong>${esc(currentUser||"super admin")}</strong></td><td>${superLabel}</td><td></td></tr>`;
   users.forEach(u=>{
     const roleCls=u.role==="admin"?"role-admin":"role-viewer";
     rows+=`<tr>
       <td>${esc(u.username)}</td>
       <td><span class="role-pill ${roleCls}">${u.role}</span></td>
       <td style="text-align:right">
+        <button class="ghost sm" data-edituser="${esc(u.username)}" style="font-size:11px;margin-right:4px">✎ Edit</button>
         <button class="ghost sm" data-promote="${esc(u.username)}" data-role="${u.role==="admin"?"viewer":"admin"}" style="font-size:11px">
           ${u.role==="admin"?"→ Viewer":"→ Admin"}
         </button>
@@ -874,7 +894,70 @@ $("manageUsersBtn").onclick=openUsersPanel;
 $("closeUsersBtn").onclick=()=>$("usersMg").classList.remove("show");
 $("usersMg").onclick=e=>{if(e.target===$("usersMg"))$("usersMg").classList.remove("show");};
 
+// ---- Super admin: rename a user / set their password ----
+let ueTarget=null;
+const UE_ERRORS={
+  username_taken:"That username is already taken.",
+  username_reserved:"That name is reserved for the super admin.",
+  username_required:"Enter a username.",
+  invalid_username:"2–32 characters: letters, numbers, dot, dash or underscore.",
+  password_too_short:"New password must be at least 6 characters.",
+  not_found:"That user no longer exists — close and reopen this panel.",
+  superadmin_use_env:"The super admin is set by Vercel environment variables, not here.",
+  forbidden:"Only the super admin can edit users."
+};
+function ueMsg(text,ok){
+  const el=$("ueMsg");
+  el.textContent=text||"";
+  el.style.color=ok?"#2fb985":"#e5646d";
+}
+function openUserEdit(username){
+  ueTarget=username;
+  $("ueUser").value=username;
+  $("uePass").value="";
+  ueMsg("");
+  $("ueSub").textContent=`Renaming signs ${username} out, so they'll need to log in again.`;
+  $("userEditMg").classList.add("show");
+  setTimeout(()=>$("ueUser").focus(),60);
+}
+$("ueCancelBtn").onclick=()=>$("userEditMg").classList.remove("show");
+$("userEditMg").onclick=e=>{if(e.target===$("userEditMg"))$("userEditMg").classList.remove("show");};
+$("ueSaveBtn").onclick=async()=>{
+  const username=$("ueUser").value.trim().toLowerCase();
+  const password=$("uePass").value;
+  if(!username){ueMsg(UE_ERRORS.username_required);return;}
+  if(password&&password.length<6){ueMsg(UE_ERRORS.password_too_short);return;}
+  const payload={};
+  if(username!==ueTarget) payload.username=username;
+  if(password) payload.password=password;
+  if(!payload.username&&!payload.password){ueMsg("Nothing to change.");return;}
+  $("ueSaveBtn").disabled=true; ueMsg("Saving…",true);
+  try{
+    const res=await fetch(`/api/users/${encodeURIComponent(ueTarget)}`,{
+      method:"PATCH",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    });
+    const body=await res.json().catch(()=>({}));
+    if(!res.ok){ueMsg(UE_ERRORS[body.error]||`Couldn't save (${res.status}).`);return;}
+    $("userEditMg").classList.remove("show");
+    const done=[];
+    if(payload.username) done.push(`renamed to "${payload.username}"`);
+    if(payload.password) done.push("password reset");
+    toast(`${ueTarget} — ${done.join(", ")}`);
+    openUsersPanel();
+  }catch(err){
+    ueMsg("Network error — "+(err&&err.message?err.message:"try again"));
+  }finally{
+    $("ueSaveBtn").disabled=false;
+  }
+};
+["ueUser","uePass"].forEach(id=>{
+  $(id).addEventListener("keydown",e=>{ if(e.key==="Enter") $("ueSaveBtn").click(); });
+});
+
 $("usersList").addEventListener("click",async e=>{
+  const editBtn=e.target.closest("[data-edituser]");
+  if(editBtn){ openUserEdit(editBtn.dataset.edituser); return; }
   const promoteBtn=e.target.closest("[data-promote]");
   const removeBtn=e.target.closest("[data-remove]");
   if(promoteBtn){
