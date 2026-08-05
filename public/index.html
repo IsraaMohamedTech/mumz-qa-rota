@@ -149,6 +149,98 @@
   .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
   .footer-note{text-align:center;color:var(--faint);font-size:12px;margin-top:34px;line-height:1.6}
   .hidden{display:none !important}
+
+  /* ---- Phone / mWeb ------------------------------------------------------
+     The rota table carries up to 9 columns behind a 820px min-width, which on a
+     phone means scrolling sideways to read a row. Below 760px each row becomes
+     a stacked card that labels its own cells, so the page only scrolls down. */
+  @media (max-width:760px){
+    .wrap{padding:18px 14px 72px}
+    header{margin-bottom:18px;gap:12px}
+    .brand h1{font-size:19px}
+    .logo{width:40px;height:40px;font-size:21px;border-radius:11px}
+    .head-actions{width:100%;gap:8px}
+    .head-actions button,.head-actions select{flex:1 1 auto;min-height:42px}
+
+    .stats{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
+    .stat{padding:13px 14px}
+    .stat .v{font-size:23px}
+
+    .toolbar{gap:8px}
+    .tabs{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .spacer{display:none}
+    .search{width:100%;min-width:0}
+
+    /* Rows become cards */
+    .table-card{background:transparent;border:none;box-shadow:none;border-radius:0;overflow:visible}
+    .tbl-scroll{overflow-x:visible}
+    table{min-width:0}
+    thead{display:none}
+    tbody,tbody tr,tbody td{display:block;width:100%}
+    tbody tr{background:var(--panel);border:1px solid var(--border);border-left-width:3px;border-radius:12px;margin:0 0 10px}
+    tbody tr:hover{background:var(--panel)}
+    tbody tr.active-row{background:linear-gradient(180deg,rgba(255,211,77,.13),transparent)}
+    tbody tr.type-oncall{border-left-color:var(--oncall)}
+    tbody tr.type-regression{border-left-color:var(--regression)}
+    tbody tr.type-postcheck{border-left-color:var(--postcheck)}
+    /* the desktop left stripe lives on the first cell; the card owns it instead */
+    tbody tr.type-oncall td:first-child,
+    tbody tr.type-regression td:first-child,
+    tbody tr.type-postcheck td:first-child{box-shadow:none}
+    tbody td{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:9px 13px;border-bottom:1px solid var(--border)}
+    tbody tr td:last-child{border-bottom:none}
+    tbody td::before{content:attr(data-label);flex:0 0 74px;color:var(--muted);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding-top:3px}
+    tbody td[data-label=""]::before{display:none}
+    /* Release and Notes never apply to an on-call entry, so don't spend two
+       rows of a phone card rendering two dashes. */
+    tbody tr.type-oncall td[data-label="Release"],
+    tbody tr.type-oncall td[data-label="Notes"]{display:none}
+    .cmt{max-width:none;text-align:right}
+    .audit{white-space:normal;text-align:right}
+    .daterange{white-space:normal}
+    .row-actions{width:100%}
+    .row-actions button{flex:1;min-height:40px}
+
+    /* Group headers become section titles above their cards */
+    .group-row{border:none;background:transparent;margin:16px 0 8px}
+    .group-row td,
+    .group-row.type-oncall td,
+    .group-row.type-regression td,
+    .group-row.type-postcheck td{display:flex;align-items:center;justify-content:space-between;
+      background:transparent;border:none;padding:0}
+    .group-row td::before{display:none}
+    .group-title{padding:0}
+
+    /* Modals */
+    .modal-bg{padding:12px}
+    .modal{padding:20px 18px}
+    .grid2{grid-template-columns:1fr}
+    .modal-actions{flex-wrap:wrap}
+    .modal-actions button{min-height:44px}
+    .users-table th,.users-table td{padding:8px 7px;font-size:12px}
+
+    /* 16px keeps iOS Safari from zooming the page when a field takes focus */
+    select,input,textarea{font-size:16px}
+  }
+
+  /* Tablet portrait: keep the familiar table, but tighten it so 9 columns fit
+     inside ~768px instead of forcing a sideways scroll. */
+  @media (min-width:761px) and (max-width:1000px){
+    .wrap{padding:22px 16px 80px}
+    table{min-width:700px}
+    thead th{padding:12px 10px}
+    tbody td{padding:12px 10px}
+    .cmt{max-width:170px}
+  }
+
+  @media (max-width:400px){
+    /* Two buttons per row. Full width would push the rota itself below seven
+       stacked buttons before any entry is visible. */
+    .head-actions button{flex:1 1 calc(50% - 4px);min-height:40px}
+    .head-actions select{flex:1 1 100%}
+    tbody td::before{flex-basis:66px}
+    tbody td{padding:8px 11px;gap:10px}
+  }
 </style>
 </head>
 <body>
@@ -558,7 +650,9 @@ function renderTable(){
     const t=TYPES[e.type];
     const dur=daysBetween(e.from,e.to);
     const active=isActive(e);
-    const st=t.rel?WORK_STATUS[e.workStatus||"todo"]:STATUS[statusOf(e)];
+    // Fall back to "todo" for an unrecognised workStatus: without this, one bad
+    // value throws inside .map() and the whole table silently renders empty.
+    const st=t.rel?(WORK_STATUS[e.workStatus]||WORK_STATUS.todo):STATUS[statusOf(e)];
     let relCell="",noteCell="";
     if(showRel){
       if(t.rel){
@@ -578,15 +672,17 @@ function renderTable(){
       ?`<div class="daterange">${fmtDate(e.from||e.to)}</div>`
       :(e.from||e.to)?`<div class="daterange">${fmtDate(e.from)||"…"}<span class="to">→</span>${fmtDate(e.to)||"…"}</div>${dur?`<div class="dur">${dur} day${dur>1?"s":""}</div>`:""}`
       :`<span class="dash">—</span>`;
+    // data-label drives the mobile card layout: below 760px each cell shows its
+    // column name inline, so the table needs no horizontal scrolling.
     return`<tr class="type-${e.type}${active?" active-row":""}">
-      <td><span class="badge ${t.cls}"><span class="d" style="background:${t.color}"></span>${t.short}</span></td>
-      <td><span class="status ${st.cls}"><span class="d"></span>${st.label}</span></td>
-      <td>${dateCell}</td>
-      <td class="team">${esc(e.team)||'<span class="dash">—</span>'}${(!showSwap&&e.type==="oncall"&&e.swap)?`<div class="swap-tag">⇄ ${esc(e.swap)}</div>`:""}</td>
-      ${showRel?`<td>${relCell}</td><td>${noteCell}</td>`:""}
-      ${showSwap?`<td>${e.swap?`<span class="swap-tag">⇄ ${esc(e.swap)}</span>`:'<span class="dash">—</span>'}</td>`:""}
-      <td><div class="cmt">${esc(e.comment)||'<span class="dash">—</span>'}</div>${audit?`<div class="audit">${esc(audit)}</div>`:""}</td>
-      <td><div class="row-actions">${canEdit?`<button class="ghost sm" data-edit="${e.id}">Edit</button>`:""}</div></td>
+      <td data-label="Type"><span class="badge ${t.cls}"><span class="d" style="background:${t.color}"></span>${t.short}</span></td>
+      <td data-label="Status"><span class="status ${st.cls}"><span class="d"></span>${st.label}</span></td>
+      <td data-label="Dates">${dateCell}</td>
+      <td class="team" data-label="QA Team">${esc(e.team)||'<span class="dash">—</span>'}${(!showSwap&&e.type==="oncall"&&e.swap)?`<div class="swap-tag">⇄ ${esc(e.swap)}</div>`:""}</td>
+      ${showRel?`<td data-label="Release">${relCell}</td><td data-label="Notes">${noteCell}</td>`:""}
+      ${showSwap?`<td data-label="Swap">${e.swap?`<span class="swap-tag">⇄ ${esc(e.swap)}</span>`:'<span class="dash">—</span>'}</td>`:""}
+      <td data-label="Comment"><div class="cmt">${esc(e.comment)||'<span class="dash">—</span>'}</div>${audit?`<div class="audit">${esc(audit)}</div>`:""}</td>
+      <td data-label=""><div class="row-actions">${canEdit?`<button class="ghost sm" data-edit="${e.id}">Edit</button>`:""}</div></td>
     </tr>`;
   };
 
