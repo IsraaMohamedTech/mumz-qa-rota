@@ -178,30 +178,32 @@
     .spacer{display:none}
     .search{width:100%;min-width:0}
 
-    /* Rows become cards */
+    /* Rota rows become cards. Every selector here is scoped to .tbl-scroll —
+       unscoped `tbody`/`thead` rules also restyled the Manage Users table,
+       hiding its header and indenting each name by an empty label column. */
     .table-card{background:transparent;border:none;box-shadow:none;border-radius:0;overflow:visible}
     .tbl-scroll{overflow-x:visible}
     .tbl-scroll table{min-width:0}
-    thead{display:none}
-    tbody,tbody tr,tbody td{display:block;width:100%}
-    tbody tr{background:var(--panel);border:1px solid var(--border);border-left-width:3px;border-radius:12px;margin:0 0 10px}
-    tbody tr:hover{background:var(--panel)}
-    tbody tr.active-row{background:linear-gradient(180deg,rgba(255,211,77,.13),transparent)}
-    tbody tr.type-oncall{border-left-color:var(--oncall)}
-    tbody tr.type-regression{border-left-color:var(--regression)}
-    tbody tr.type-postcheck{border-left-color:var(--postcheck)}
+    .tbl-scroll thead{display:none}
+    .tbl-scroll tbody,.tbl-scroll tbody tr,.tbl-scroll tbody td{display:block;width:100%}
+    .tbl-scroll tbody tr{background:var(--panel);border:1px solid var(--border);border-left-width:3px;border-radius:12px;margin:0 0 10px}
+    .tbl-scroll tbody tr:hover{background:var(--panel)}
+    .tbl-scroll tbody tr.active-row{background:linear-gradient(180deg,rgba(255,211,77,.13),transparent)}
+    .tbl-scroll tbody tr.type-oncall{border-left-color:var(--oncall)}
+    .tbl-scroll tbody tr.type-regression{border-left-color:var(--regression)}
+    .tbl-scroll tbody tr.type-postcheck{border-left-color:var(--postcheck)}
     /* the desktop left stripe lives on the first cell; the card owns it instead */
-    tbody tr.type-oncall td:first-child,
-    tbody tr.type-regression td:first-child,
-    tbody tr.type-postcheck td:first-child{box-shadow:none}
-    tbody td{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:9px 13px;border-bottom:1px solid var(--border)}
-    tbody tr td:last-child{border-bottom:none}
-    tbody td::before{content:attr(data-label);flex:0 0 74px;color:var(--muted);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding-top:3px}
-    tbody td[data-label=""]::before{display:none}
+    .tbl-scroll tbody tr.type-oncall td:first-child,
+    .tbl-scroll tbody tr.type-regression td:first-child,
+    .tbl-scroll tbody tr.type-postcheck td:first-child{box-shadow:none}
+    .tbl-scroll tbody td{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:9px 13px;border-bottom:1px solid var(--border)}
+    .tbl-scroll tbody tr td:last-child{border-bottom:none}
+    .tbl-scroll tbody td::before{content:attr(data-label);flex:0 0 74px;color:var(--muted);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding-top:3px}
+    .tbl-scroll tbody td[data-label=""]::before{display:none}
     /* Release and Notes never apply to an on-call entry, so don't spend two
        rows of a phone card rendering two dashes. */
-    tbody tr.type-oncall td[data-label="Release"],
-    tbody tr.type-oncall td[data-label="Notes"]{display:none}
+    .tbl-scroll tbody tr.type-oncall td[data-label="Release"],
+    .tbl-scroll tbody tr.type-oncall td[data-label="Notes"]{display:none}
     .cmt{max-width:none;text-align:right}
     .audit{white-space:normal;text-align:right}
     .daterange{white-space:normal}
@@ -235,8 +237,8 @@
   @media (min-width:761px) and (max-width:1000px){
     .wrap{padding:22px 16px 80px}
     .tbl-scroll table{min-width:700px}
-    thead th{padding:12px 10px}
-    tbody td{padding:12px 10px}
+    .tbl-scroll thead th{padding:12px 10px}
+    .tbl-scroll tbody td{padding:12px 10px}
     .cmt{max-width:170px}
   }
 
@@ -245,8 +247,8 @@
        stacked buttons before any entry is visible. */
     .head-actions button{flex:1 1 calc(50% - 4px);min-height:40px}
     .head-actions select{flex:1 1 100%}
-    tbody td::before{flex-basis:66px}
-    tbody td{padding:8px 11px;gap:10px}
+    .tbl-scroll tbody td::before{flex-basis:66px}
+    .tbl-scroll tbody td{padding:8px 11px;gap:10px}
   }
 </style>
 </head>
