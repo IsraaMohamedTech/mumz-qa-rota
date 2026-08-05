@@ -172,6 +172,7 @@
       <button class="ghost hidden" id="importBtn">⬆ Import</button>
       <button class="ghost" id="exportBtn">⬇ Export</button>
       <button class="primary hidden" id="addBtn">+ Add entry</button>
+      <button class="ghost hidden" id="changePassBtn" style="font-size:12.5px">🔑 Password</button>
       <button class="ghost" id="signOutBtn" style="font-size:12.5px">Sign out</button>
     </div>
   </header>
@@ -286,6 +287,26 @@
   </div>
 </div>
 
+<!-- Change your own password. Super admins don't see this: their password comes
+     from a Vercel env var, so the API refuses to change it here. -->
+<div class="modal-bg" id="changePassMg" style="z-index:70">
+  <div class="modal" style="max-width:400px">
+    <h3>Change your password</h3>
+    <div class="sub">You'll stay signed in on this device.</div>
+    <label>Current password</label>
+    <input type="password" id="cpCurrent" autocomplete="current-password" placeholder="••••••••">
+    <label>New password</label>
+    <input type="password" id="cpNew" autocomplete="new-password" placeholder="At least 6 characters">
+    <label>Confirm new password</label>
+    <input type="password" id="cpConfirm" autocomplete="new-password" placeholder="••••••••">
+    <div id="cpMsg" style="font-size:12.5px;margin-top:10px;min-height:16px"></div>
+    <div class="modal-actions" style="margin-top:12px">
+      <button class="ghost" id="cpCancelBtn">Cancel</button>
+      <button class="primary" id="cpSaveBtn">Change password</button>
+    </div>
+  </div>
+</div>
+
 <!-- Login screen -->
 <div class="modal-bg" id="lockScreen" style="z-index:80">
   <div class="modal" style="max-width:400px">
@@ -391,6 +412,7 @@ function applyRole(username, role){
   $("addBtn").classList.toggle("hidden",!canEdit);
   $("importBtn").classList.toggle("hidden",!canEdit);
   $("manageUsersBtn").classList.toggle("hidden",!isSuperAdmin);
+  $("changePassBtn").classList.toggle("hidden",isSuperAdmin);
   const ub=$("userBadge");
   ub.classList.remove("hidden");
   const roleLabel=isSuperAdmin?"Super Admin":role==="admin"?"Admin":"Viewer";
@@ -819,6 +841,51 @@ async function signIn(){
 $("lockBtn").onclick=signIn;
 $("lockPass").addEventListener("keydown",e=>{if(e.key==="Enter")signIn();});
 $("lockUser").addEventListener("keydown",e=>{if(e.key==="Enter")$("lockPass").focus();});
+
+// ---- Change your own password ----
+const CP_ERRORS={
+  current_and_new_password_required:"Fill in both your current and new password.",
+  password_too_short:"New password must be at least 6 characters.",
+  wrong_current_password:"That isn't your current password.",
+  superadmin_use_env:"The super admin password is set in Vercel's environment variables, not here.",
+  not_found:"Your account no longer exists — sign out and back in."
+};
+function cpMsg(text,ok){
+  const el=$("cpMsg");
+  el.textContent=text||"";
+  el.style.color=ok?"#2fb985":"#e5646d";
+}
+$("changePassBtn").onclick=()=>{
+  ["cpCurrent","cpNew","cpConfirm"].forEach(id=>{$(id).value="";});
+  cpMsg("");
+  $("changePassMg").classList.add("show");
+  setTimeout(()=>$("cpCurrent").focus(),60);
+};
+$("cpCancelBtn").onclick=()=>$("changePassMg").classList.remove("show");
+$("cpSaveBtn").onclick=async()=>{
+  const currentPassword=$("cpCurrent").value, newPassword=$("cpNew").value;
+  if(!currentPassword||!newPassword) return cpMsg(CP_ERRORS.current_and_new_password_required);
+  if(newPassword.length<6) return cpMsg(CP_ERRORS.password_too_short);
+  if(newPassword!==$("cpConfirm").value) return cpMsg("The two new passwords don't match.");
+  $("cpSaveBtn").disabled=true; cpMsg("Saving…",true);
+  try{
+    const res=await fetch("/api/users/me/password",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({currentPassword,newPassword})
+    });
+    const body=await res.json().catch(()=>({}));
+    if(!res.ok){ cpMsg(CP_ERRORS[body.error]||("Couldn't change it ("+res.status+").")); return; }
+    cpMsg("Password changed.",true);
+    setTimeout(()=>$("changePassMg").classList.remove("show"),1200);
+  }catch(e){
+    cpMsg("Network error — "+(e&&e.message?e.message:"try again"));
+  }finally{
+    $("cpSaveBtn").disabled=false;
+  }
+};
+["cpCurrent","cpNew","cpConfirm"].forEach(id=>{
+  $(id).addEventListener("keydown",e=>{ if(e.key==="Enter") $("cpSaveBtn").click(); });
+});
 
 $("signOutBtn").onclick=async()=>{
   await fetch("/api/login",{method:"DELETE"});
