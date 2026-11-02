@@ -212,7 +212,6 @@
   .lv-rep td.nm{font-weight:700;text-transform:capitalize}
   .lv-rep .titles{display:block;font-size:11px;color:var(--muted);margin-top:2px}
   .lv-rep tr.mine td.nm{box-shadow:inset 3px 0 0 var(--accent)}
-  .lv-rep tfoot td{font-weight:750;background:var(--panel-2);border-bottom:none}
   .lv-empty{padding:40px;text-align:center;color:var(--muted)}
   @media (max-width:760px){
     .lv-name{min-width:118px;max-width:118px;padding:6px 8px !important}
@@ -1489,9 +1488,7 @@ function renderLeaveReport(){
   const me=(currentUser||"").toLowerCase();
   const rows=reportRows();
   const cell=n=>`<td class="num${n?"":" zero"}">${n}</td>`;
-  const tot={annual:0,sick:0,wfh:0,other:0,off:0};
   const body=rows.map(r=>{
-    Object.keys(r.c).forEach(k=>tot[k]+=r.c[k]);tot.off+=r.off;
     const t=Object.entries(r.titles).map(([k,n])=>`${esc(k)} ${n}`).join(" · ");
     return`<tr class="${isMe(r.e)?"mine":""}"><td class="nm">${esc(r.p)}</td>${cell(r.c.annual)}${cell(r.c.sick)}${cell(r.c.wfh)}`+
       `<td class="num${r.c.other?"":" zero"}">${r.c.other}${t?`<span class="titles">${t}</span>`:""}</td><td class="num" style="font-weight:750">${r.off}</td></tr>`;
@@ -1499,8 +1496,7 @@ function renderLeaveReport(){
   const sw=t=>`<span class="sw" style="background:var(--lv-${t})"></span>`;
   $("lvReport").innerHTML=`<thead><tr><th>Employee</th><th class="num">${sw("annual")}Annual</th><th class="num">${sw("sick")}Sick</th>`+
     `<th class="num">${sw("wfh")}Work from home</th><th class="num">${sw("other")}Other</th><th class="num">Total days off</th></tr></thead>`+
-    `<tbody>${body||`<tr><td colspan="6" class="lv-empty">No people yet.</td></tr>`}</tbody>`+
-    (rows.length>1?`<tfoot><tr><td>Team total</td>${cell(tot.annual)}${cell(tot.sick)}${cell(tot.wfh)}${cell(tot.other)}<td class="num">${tot.off}</td></tr></tfoot>`:"");
+    `<tbody>${body||`<tr><td colspan="6" class="lv-empty">No people yet.</td></tr>`}</tbody>`;
 }
 function downloadLeaveReport(){
   const q=v=>/[",\n]/.test(v)?`"${String(v).replace(/"/g,'""')}"`:String(v);
