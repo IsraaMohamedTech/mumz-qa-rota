@@ -157,6 +157,69 @@
   .footer-note{text-align:center;color:var(--faint);font-size:12px;margin-top:34px;line-height:1.6}
   .hidden{display:none !important}
 
+  /* ---- Leaves calendar ---------------------------------------------------- */
+  :root{
+    --lv-annual:#3b82f6; --lv-sick:#ef4444; --lv-wfh:#a855f7; --lv-other:#f59e0b;
+    --lv-weekend:rgba(138,144,166,.13);
+  }
+  .lv-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .lv-brushes{display:flex;gap:6px;flex-wrap:wrap}
+  .lv-brush{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:10px;border:1.5px solid var(--border);background:var(--panel);font-weight:650;font-size:13px;cursor:pointer;color:var(--text)}
+  .lv-brush:hover{border-color:var(--accent)}
+  .lv-brush.sel{border-color:var(--text);background:var(--panel-3)}
+  .lv-brush .sw{width:14px;height:14px;border-radius:4px}
+  .lv-brush .sw.clear{border:1.5px dashed var(--muted)}
+  #lvTitle{width:220px;border-color:var(--lv-other)}
+  .lv-hint{font-size:12.5px;color:var(--muted);margin:-2px 0 12px}
+  .lv-off{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:12px}
+  .lv-chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:20px;font-weight:650;color:var(--text);background:var(--panel)}
+  .lv-chip .sw{width:9px;height:9px;border-radius:3px}
+  .lv-scroll{overflow:auto;max-height:70vh;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .lv-table{border-collapse:separate;border-spacing:0;font-size:11.5px;user-select:none;-webkit-user-select:none}
+  .lv-table th,.lv-table td{padding:0;border-bottom:1px solid var(--border)}
+  .lv-table thead th{position:sticky;background:var(--panel-2);z-index:2;font-weight:700;color:var(--muted)}
+  .lv-table thead tr:first-child th{top:0;height:30px}
+  .lv-table thead tr:nth-child(2) th{top:30px;height:38px}
+  .lv-month{text-align:left;padding:0 10px !important;font-size:12px;color:var(--text) !important;text-transform:uppercase;letter-spacing:.05em;border-left:2px solid var(--border)}
+  .lv-day{width:28px;min-width:28px;text-align:center;line-height:1.15;font-variant-numeric:tabular-nums}
+  .lv-day .wd{display:block;font-size:9.5px;font-weight:600;color:var(--faint)}
+  .lv-day.wkend{background:var(--lv-weekend)}
+  .lv-day.today,.lv-cell.today{box-shadow:inset 0 0 0 2px var(--active)}
+  .lv-day.m1,.lv-cell.m1{border-left:2px solid var(--border)}
+  .lv-name{position:sticky;left:0;z-index:1;background:var(--panel);min-width:170px;max-width:170px;padding:6px 12px !important;border-right:1px solid var(--border);text-align:left}
+  .lv-table thead .lv-name{z-index:3;background:var(--panel-2)}
+  .lv-name .nm{font-weight:700;font-size:13px;color:var(--text);text-transform:capitalize;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lv-name .tot{font-size:10.5px;color:var(--faint);margin-top:2px;white-space:nowrap}
+  .lv-name .you{font-size:10px;font-weight:700;color:var(--accent);margin-left:5px;text-transform:none}
+  .lv-name .rm{float:right;border:none;background:none;padding:0 2px;color:var(--faint);font-size:13px}
+  .lv-name .rm:hover{color:#e5646d;transform:none}
+  .lv-row.mine .lv-name{box-shadow:inset 3px 0 0 var(--accent)}
+  .lv-cell{height:38px;width:28px;min-width:28px;text-align:center;font-weight:800;font-size:10.5px;color:#fff}
+  .lv-cell.wkend{background:var(--lv-weekend)}
+  .lv-row.editable .lv-cell:not(.wkend){cursor:pointer}
+  .lv-row.editable .lv-cell:not(.wkend):hover{outline:2px solid var(--accent);outline-offset:-2px}
+  .lv-cell.annual{background:var(--lv-annual)}
+  .lv-cell.sick{background:var(--lv-sick)}
+  .lv-cell.wfh{background:var(--lv-wfh)}
+  .lv-cell.other{background:var(--lv-other);color:#3a2600}
+  .lv-cell.pending{opacity:.55}
+  .lv-rep{width:100%;border-collapse:collapse;min-width:640px}
+  .lv-rep th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding:12px 14px;background:var(--panel-2);border-bottom:1px solid var(--border);white-space:nowrap}
+  .lv-rep th .sw{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;vertical-align:middle}
+  .lv-rep td{padding:11px 14px;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums}
+  .lv-rep td.num,.lv-rep th.num{text-align:right}
+  .lv-rep td.zero{color:var(--faint)}
+  .lv-rep td.nm{font-weight:700;text-transform:capitalize}
+  .lv-rep .titles{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+  .lv-rep tr.mine td.nm{box-shadow:inset 3px 0 0 var(--accent)}
+  .lv-rep tfoot td{font-weight:750;background:var(--panel-2);border-bottom:none}
+  .lv-empty{padding:40px;text-align:center;color:var(--muted)}
+  @media (max-width:760px){
+    .lv-name{min-width:118px;max-width:118px;padding:6px 8px !important}
+    .lv-brush{flex:1 1 calc(50% - 6px);justify-content:center}
+    #lvTitle{width:100%}
+  }
+
   /* ---- Phone / mWeb ------------------------------------------------------
      The rota table carries up to 9 columns behind a 820px min-width, which on a
      phone means scrolling sideways to read a row. Below 760px each row becomes
@@ -286,6 +349,8 @@
       <div class="tab" data-type="oncall"><span class="dot" style="background:var(--oncall)"></span>QA on Call</div>
       <div class="tab" data-type="regression"><span class="dot" style="background:var(--regression)"></span>Regression</div>
       <div class="tab" data-type="postcheck"><span class="dot" style="background:var(--postcheck)"></span>Post Checks</div>
+      <div class="tab" data-type="leaves"><span class="dot" style="background:var(--lv-annual)"></span>Leaves</div>
+      <div class="tab" data-type="employees">👥 Employees</div>
     </div>
     <div class="spacer"></div>
     <select id="rangeSelect">
@@ -305,6 +370,51 @@
       <div class="big">🗓️</div>
       <p id="emptyMsg">No rota entries yet.</p>
     </div>
+  </div>
+
+  <!-- Leaves calendar: one row per person, one column per day, Dec 2026 – Dec 2027 -->
+  <div id="leavesPanel" class="hidden">
+    <div class="lv-bar">
+      <div class="lv-brushes" id="lvBrushes" role="radiogroup" aria-label="Leave type to fill">
+        <button type="button" class="lv-brush sel" data-brush="annual"><span class="sw" style="background:var(--lv-annual)"></span>Annual leave</button>
+        <button type="button" class="lv-brush" data-brush="sick"><span class="sw" style="background:var(--lv-sick)"></span>Sick leave</button>
+        <button type="button" class="lv-brush" data-brush="wfh"><span class="sw" style="background:var(--lv-wfh)"></span>Work from home</button>
+        <button type="button" class="lv-brush" data-brush="other"><span class="sw" style="background:var(--lv-other)"></span>Other leave</button>
+        <button type="button" class="lv-brush" data-brush=""><span class="sw clear"></span>Clear</button>
+      </div>
+      <input type="text" id="lvTitle" class="hidden" maxlength="40" placeholder="Title, e.g. Hajj, Exam leave" aria-label="Title for other leave">
+      <div class="spacer"></div>
+      <select id="lvMonth" title="Jump to month"></select>
+      <button class="ghost sm" id="lvTodayBtn" type="button">Today</button>
+      <button class="ghost sm hidden" id="lvAddPersonBtn" type="button">👥 Manage employees</button>
+    </div>
+    <p class="lv-hint" id="lvHint"></p>
+    <div class="lv-off" id="lvOffToday"></div>
+    <div class="lv-scroll" id="lvScroll"><table class="lv-table" id="lvTable"></table></div>
+
+    <!-- Per-person totals for the chosen year -->
+    <div class="lv-report">
+      <div class="lv-bar" style="margin:26px 0 10px">
+        <h3 style="font-size:16px;font-weight:750">Leave report</h3>
+        <select id="lvReportYear" title="Year"></select>
+        <div class="spacer"></div>
+        <button class="ghost sm" id="lvReportCsv" type="button">⬇ Download CSV</button>
+      </div>
+      <p class="lv-hint" id="lvReportNote"></p>
+      <div class="table-card"><div style="overflow-x:auto"><table class="lv-rep" id="lvReport"></table></div></div>
+    </div>
+  </div>
+
+  <!-- Employees: the people list behind the Leaves calendar and the rota's team-name suggestions -->
+  <div id="employeesPanel" class="hidden">
+    <div class="lv-bar">
+      <h3 style="font-size:16px;font-weight:750">Employees <span id="empCount" style="color:var(--muted);font-weight:600"></span></h3>
+      <div class="spacer"></div>
+      <label style="margin:0;display:flex;align-items:center;gap:6px;font-size:12.5px"><input type="checkbox" id="empShowInactive" style="width:auto"> Show inactive</label>
+      <button class="primary hidden" id="empAddBtn" type="button">+ Add employee</button>
+    </div>
+    <p class="lv-hint">Every active employee gets a row in the <b>Leaves</b> calendar and is suggested as the <b>QA team name</b> when adding a rota entry. Link a login so that person can fill in their own leave. Existing rota entries are never changed.</p>
+    <div class="table-card"><div style="overflow-x:auto"><table class="lv-rep" id="empTable"></table></div></div>
   </div>
   <p class="footer-note" id="storeHelp"></p>
   <p class="footer-note" id="storeDiag" style="font-size:11px;opacity:.75"></p>
@@ -326,7 +436,8 @@
       <div id="toFieldWrap"><label>Date to</label><input type="date" id="fTo"></div>
     </div>
     <label>QA team name</label>
-    <input type="text" id="fTeam" placeholder="e.g. Team Falcon / Sara A.">
+    <input type="text" id="fTeam" list="empNames" placeholder="e.g. Team Falcon / Sara A." autocomplete="off">
+    <datalist id="empNames"></datalist>
     <div id="oncallFields">
       <label>Swap / cover <span style="color:var(--faint);font-weight:400">(optional)</span></label>
       <input type="text" id="fSwap" placeholder="e.g. Omar covering for Sara on 12 Jul">
@@ -358,6 +469,28 @@
       <button class="danger hidden" id="deleteBtn">Delete</button>
       <button class="ghost" id="cancelBtn">Cancel</button>
       <button class="primary" id="saveBtn">Save entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add / edit employee -->
+<div class="modal-bg" id="empModal" style="z-index:60">
+  <div class="modal" style="max-width:460px">
+    <h3 id="empModalTitle">Add employee</h3>
+    <div class="sub">Shows up in the Leaves calendar and the rota's team-name suggestions.</div>
+    <input type="hidden" id="empId">
+    <label for="empName">Full name</label>
+    <input type="text" id="empName" maxlength="60" placeholder="e.g. Sara Ahmed" autocomplete="off">
+    <label for="empPosition">Position <span style="color:var(--faint);font-weight:400">(optional)</span></label>
+    <input type="text" id="empPosition" maxlength="60" placeholder="e.g. Senior QA" autocomplete="off">
+    <label for="empLogin">Dashboard login <span style="color:var(--faint);font-weight:400">(lets them fill their own leave)</span></label>
+    <select id="empLogin"></select>
+    <label style="display:flex;align-items:center;gap:8px;margin-top:16px;color:var(--text);font-size:13px"><input type="checkbox" id="empActive" style="width:auto" checked> Active — show in the Leaves calendar</label>
+    <div id="empMsg" style="color:#e5646d;font-size:12.5px;margin-top:10px;min-height:16px"></div>
+    <div class="modal-actions" style="margin-top:12px">
+      <button class="danger hidden del" id="empDeleteBtn" type="button">Delete</button>
+      <button class="ghost" id="empCancelBtn" type="button">Cancel</button>
+      <button class="primary" id="empSaveBtn" type="button">Save</button>
     </div>
   </div>
 </div>
@@ -813,7 +946,10 @@ $("fFile").onchange=e=>{if(e.target.files[0])attachFile(e.target.files[0]);};
 $("clearFileBtn").onclick=()=>{curFileData=null;curFileName=null;$("fFile").value="";updateFileUI();};
 document.querySelectorAll("#tabs .tab").forEach(tab=>tab.onclick=()=>{
   document.querySelectorAll("#tabs .tab").forEach(t=>t.classList.remove("active"));
-  tab.classList.add("active");filterType=tab.dataset.type;renderTable();
+  tab.classList.add("active");
+  if(tab.dataset.type==="leaves"||tab.dataset.type==="employees"){showPanel(tab.dataset.type);return;}
+  showPanel("rota");
+  filterType=tab.dataset.type;renderTable();
 });
 $("yearSelect").onchange=e=>{curYear=e.target.value;$("yearLabel").textContent=curYear;renderStats();renderTable();};
 $("rangeSelect").onchange=renderTable;
@@ -1080,15 +1216,388 @@ $("signOutBtn").onclick=async()=>{
   location.reload();
 };
 
+// ---- Leaves calendar ----
+// One row per person, one column per day. Each person fills their own row
+// (admins can fill anyone's): pick a leave type, then click a day or drag
+// across days. Weekends (Sat/Sun, UAE) are shaded and never filled.
+const LEAVE_TYPES={
+  annual:{label:"Annual leave",short:"A"},
+  sick:{label:"Sick leave",short:"S"},
+  wfh:{label:"Work from home",short:"W"},
+  other:{label:"Other leave",short:"O"},
+};
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const WD=["Su","Mo","Tu","We","Th","Fr","Sa"];
+let lv={from:"2026-12-01",to:"2027-12-31",people:[],cells:{},days:[],loaded:false};
+let brush="annual", leavesVisible=false, drag=null;
+
+// All date maths in UTC so a day never shifts with the viewer's timezone.
+function buildDays(from,to){
+  const out=[];
+  for(let t=Date.parse(from+"T00:00:00Z");t<=Date.parse(to+"T00:00:00Z");t+=86400000){
+    const d=new Date(t), iso=d.toISOString().slice(0,10), wd=d.getUTCDay();
+    out.push({iso,day:d.getUTCDate(),month:d.getUTCMonth(),year:d.getUTCFullYear(),wd,wkend:wd===0||wd===6});
+  }
+  return out;
+}
+// "Other leave — Hajj" when the day carries a title
+const leaveLabel=v=>LEAVE_TYPES[v.t].label+(v.title?` — ${v.title}`:"");
+const isAdminRole=()=>currentRole==="admin"||currentRole==="superadmin";
+// Rows come from the Employees tab. An employee linked to your login is "you"
+// and that row is yours to fill; admins can fill any row.
+const isMe=e=>!!e.username&&e.username===(currentUser||"").toLowerCase();
+const canEditRow=e=>isAdminRole()||isMe(e);
+const meFirst=list=>list.slice().sort((a,b)=>isMe(b)-isMe(a)||a.name.localeCompare(b.name));
+const calendarEmps=()=>meFirst(lv.employees.filter(e=>e.active!==false));
+
+// Totals under each name follow the year picked in the Leave report
+function leaveTotals(id){
+  const c={annual:0,sick:0,wfh:0,other:0};
+  for(const d of lv.days){if(String(d.year)!==reportYear)continue;const v=lv.cells[id+"|"+d.iso];if(v&&c[v.t]!==undefined)c[v.t]++;}
+  return c;
+}
+
+async function loadLeaves(){
+  try{
+    const res=await fetch("/api/leaves",{cache:"no-store"});
+    if(res.status===401){showLock("Session expired — sign in again.");return;}
+    if(!res.ok) throw new Error("server "+res.status);
+    const b=await res.json();
+    lv.from=b.from;lv.to=b.to;lv.employees=b.employees||[];lv.cells=b.cells||{};
+    fillEmployeeSuggestions(lv.employees);
+    if(!lv.days.length||lv.days[0].iso!==lv.from) lv.days=buildDays(lv.from,lv.to);
+    lv.loaded=true;
+    renderLeaves();
+  }catch(e){
+    $("lvTable").innerHTML=`<tbody><tr><td class="lv-empty">Couldn't load leaves — ${esc(e.message||"error")}</td></tr></tbody>`;
+  }
+}
+
+function renderLeaves(){
+  ensureReportYear();
+  // Your own row first, then everyone else alphabetically
+  const emps=calendarEmps();
+  $("lvAddPersonBtn").classList.toggle("hidden",!isAdminRole());
+  $("lvHint").textContent=isAdminRole()
+    ?"Pick a type, then click a day or drag across days in any row. Weekends (Sat–Sun) are skipped. Click a filled day with the same type to clear it. For Other leave, type a title first (e.g. Hajj)."
+    :"Pick a type, then click a day or drag across days in your row (highlighted). Weekends (Sat–Sun) are skipped. Click a filled day with the same type to clear it. For Other leave, type a title first (e.g. Hajj).";
+
+  // Month header with colspans, then day header
+  let mh=`<tr><th class="lv-name" rowspan="2">Employee</th>`, dh="<tr>";
+  let i=0;
+  while(i<lv.days.length){
+    const d=lv.days[i];let n=0;
+    while(i+n<lv.days.length&&lv.days[i+n].month===d.month&&lv.days[i+n].year===d.year)n++;
+    mh+=`<th class="lv-month" colspan="${n}" id="lvm-${d.year}-${d.month}">${MONTHS[d.month]} ${d.year}</th>`;
+    i+=n;
+  }
+  lv.days.forEach(d=>{
+    dh+=`<th class="lv-day${d.wkend?" wkend":""}${d.iso===TODAY?" today":""}${d.day===1?" m1":""}" title="${WD[d.wd]} ${d.day} ${MONTHS[d.month]} ${d.year}">${d.day}<span class="wd">${WD[d.wd]}</span></th>`;
+  });
+  const rows=emps.map(e=>{
+    const tot=leaveTotals(e.id), edit=canEditRow(e), mine=isMe(e);
+    let r=`<tr class="lv-row${edit?" editable":""}${mine?" mine":""}" data-emp="${escAttr(e.id)}">`+
+      `<td class="lv-name"><div class="nm" title="${escAttr(e.name+(e.position?" · "+e.position:""))}">${esc(e.name)}${mine?'<span class="you">you</span>':""}</div>`+
+      `<div class="tot" title="${reportYear} totals: annual · sick · work from home · other">${reportYear}: A ${tot.annual} · S ${tot.sick} · W ${tot.wfh} · O ${tot.other}</div></td>`;
+    lv.days.forEach((d,idx)=>{
+      const v=lv.cells[e.id+"|"+d.iso];
+      const t=v&&LEAVE_TYPES[v.t]?v.t:"";
+      const tip=t?`${leaveLabel(v)} · ${d.day} ${MONTHS[d.month]}${v.by?` · set by ${v.by}`:""}`:`${WD[d.wd]} ${d.day} ${MONTHS[d.month]} ${d.year}`;
+      r+=`<td class="lv-cell${d.wkend?" wkend":""}${t?" "+t:""}${d.iso===TODAY?" today":""}${d.day===1?" m1":""}" data-i="${idx}" title="${escAttr(tip)}">${t?LEAVE_TYPES[t].short:""}</td>`;
+    });
+    return r+"</tr>";
+  }).join("");
+  renderLeaveReport();
+  $("lvTable").innerHTML=`<thead>${mh}</tr>${dh}</tr></thead><tbody>${rows||`<tr><td class="lv-empty" colspan="${lv.days.length+1}" style="text-align:left">No employees yet${isAdminRole()?" — add them in the <b>Employees</b> tab.":"."}</td></tr>`}</tbody>`;
+  renderOffToday();
+}
+
+function renderOffToday(){
+  const off=calendarEmps().map(e=>[e.name,lv.cells[e.id+"|"+TODAY]]).filter(([,v])=>v&&LEAVE_TYPES[v.t]);
+  const inRange=TODAY>=lv.from&&TODAY<=lv.to;
+  $("lvOffToday").innerHTML=!inRange?"":
+    off.length?`<b style="color:var(--text)">Today:</b>`+off.map(([p,v])=>`<span class="lv-chip"><span class="sw" style="background:var(--lv-${v.t})"></span>${esc(p)} · ${esc(leaveLabel(v))}</span>`).join("")
+    :`<b style="color:var(--text)">Today:</b> everyone is in the office`;
+}
+
+function buildMonthSelect(){
+  const opts=[];let last="";
+  lv.days.forEach(d=>{const k=`${d.year}-${d.month}`;if(k!==last){last=k;opts.push(`<option value="${k}">${MONTHS[d.month]} ${d.year}</option>`);}});
+  $("lvMonth").innerHTML=opts.join("");
+}
+function scrollToMonth(key){
+  const th=$("lvm-"+key);if(!th)return;
+  // Measure on screen: offsetLeft is relative to the page wrapper, not the
+  // scroll box, which overshot by the page margin and hid the 1st of the month.
+  const sc=$("lvScroll"), nameW=$("lvTable").querySelector("thead .lv-name").offsetWidth;
+  sc.scrollLeft+=th.getBoundingClientRect().left-sc.getBoundingClientRect().left-nameW;
+  $("lvMonth").value=key;
+}
+function scrollToToday(){
+  const t=new Date(TODAY+"T00:00:00Z");
+  const inRange=TODAY>=lv.from&&TODAY<=lv.to;
+  scrollToMonth(inRange?`${t.getUTCFullYear()}-${t.getUTCMonth()}`:lv.days.length?`${lv.days[0].year}-${lv.days[0].month}`:"");
+}
+
+// Which view is on screen: the rota table, the Leaves calendar or Employees
+let panel="rota";
+async function showPanel(name){
+  panel=name;leavesVisible=name==="leaves";
+  const rota=name==="rota";
+  document.querySelector(".table-card").classList.toggle("hidden",!rota);
+  $("stats").classList.toggle("hidden",!rota);
+  $("rangeSelect").classList.toggle("hidden",!rota);
+  document.querySelector(".search").classList.toggle("hidden",!rota);
+  $("yearSelect").classList.toggle("hidden",!rota);
+  $("addBtn").classList.toggle("hidden",!rota||!isAdminRole());
+  $("leavesPanel").classList.toggle("hidden",name!=="leaves");
+  $("employeesPanel").classList.toggle("hidden",name!=="employees");
+  if(name==="employees"){await loadEmployees();return;}
+  if(name!=="leaves") return;
+  if(!lv.days.length){lv.days=buildDays(lv.from,lv.to);}
+  await loadLeaves();
+  buildMonthSelect();
+  scrollToToday();
+}
+
+// ---- Employees ----
+let employees=[], loginAccounts=[];
+function fillEmployeeSuggestions(list){
+  $("empNames").innerHTML=list.filter(e=>e.active!==false).map(e=>`<option value="${escAttr(e.name)}">`).join("");
+}
+async function loadEmployees(){
+  try{
+    const res=await fetch("/api/employees",{cache:"no-store"});
+    if(res.status===401){showLock("Session expired — sign in again.");return;}
+    if(!res.ok) throw new Error("server "+res.status);
+    const b=await res.json();
+    employees=b.employees||[];loginAccounts=b.accounts||[];
+    fillEmployeeSuggestions(employees);
+    if(panel==="employees") renderEmployees();
+  }catch(e){
+    if(panel==="employees") $("empTable").innerHTML=`<tbody><tr><td class="lv-empty">Couldn't load employees — ${esc(e.message||"error")}</td></tr></tbody>`;
+  }
+}
+function renderEmployees(){
+  const admin=isAdminRole();
+  $("empAddBtn").classList.toggle("hidden",!admin);
+  const showInactive=$("empShowInactive").checked;
+  const list=employees.filter(e=>showInactive||e.active!==false);
+  const active=employees.filter(e=>e.active!==false).length;
+  $("empCount").textContent=`· ${active} active${employees.length>active?`, ${employees.length-active} inactive`:""}`;
+  const rows=list.map(e=>`<tr>
+    <td class="nm" style="text-transform:none">${esc(e.name)}${isMe(e)?' <span class="you" style="font-size:10px;color:var(--accent)">you</span>':""}</td>
+    <td>${e.position?esc(e.position):'<span class="dash">—</span>'}</td>
+    <td>${e.username?`<span class="role-pill role-viewer">👤 ${esc(e.username)}</span>`:'<span class="dash">No login</span>'}</td>
+    <td>${e.active!==false?'<span class="status w-done"><span class="d"></span>Active</span>':'<span class="status s-ended"><span class="d"></span>Inactive</span>'}</td>
+    <td><div class="audit" style="margin:0">${esc(fmtAudit(e))}</div></td>
+    <td style="text-align:right">${admin?`<button class="ghost sm" data-editemp="${escAttr(e.id)}">Edit</button>`:""}</td>
+  </tr>`).join("");
+  $("empTable").innerHTML=`<thead><tr><th>Name</th><th>Position</th><th>Login</th><th>Status</th><th>Last updated</th><th></th></tr></thead>
+    <tbody>${rows||`<tr><td colspan="6" class="lv-empty">No employees yet.${admin?" Click <b>+ Add employee</b>.":""}</td></tr>`}</tbody>`;
+}
+function openEmpModal(emp){
+  $("empId").value=emp?emp.id:"";
+  $("empModalTitle").textContent=emp?"Edit employee":"Add employee";
+  $("empName").value=emp?emp.name:"";
+  $("empPosition").value=emp?emp.position||"":"";
+  $("empActive").checked=emp?emp.active!==false:true;
+  // A login can belong to one employee only
+  const taken=new Set(employees.filter(e=>e.username&&(!emp||e.id!==emp.id)).map(e=>e.username));
+  $("empLogin").innerHTML=`<option value="">— No login —</option>`+loginAccounts.map(u=>
+    `<option value="${escAttr(u)}"${taken.has(u)?" disabled":""}>${esc(u)}${taken.has(u)?" (linked to someone else)":""}</option>`).join("");
+  $("empLogin").value=emp&&emp.username?emp.username:"";
+  $("empDeleteBtn").classList.toggle("hidden",!emp||currentRole!=="superadmin");
+  $("empMsg").textContent="";
+  $("empModal").classList.add("show");
+  setTimeout(()=>$("empName").focus(),60);
+}
+const EMP_ERRORS={
+  name_required:"Enter the employee's name.",
+  name_taken:"An employee with that name already exists.",
+  unknown_login:"That login doesn't exist any more — reopen this form.",
+  login_taken:"That login is already linked to another employee.",
+  forbidden:"Only admins can add or edit employees.",
+  not_found:"This employee no longer exists — close and reopen.",
+};
+async function saveEmployee(){
+  const id=$("empId").value;
+  const payload={name:$("empName").value.trim(),position:$("empPosition").value.trim(),username:$("empLogin").value,active:$("empActive").checked};
+  if(payload.name.length<2){$("empMsg").textContent=EMP_ERRORS.name_required;return;}
+  if(id) payload.id=id;
+  $("empSaveBtn").disabled=true;
+  try{
+    const res=await fetch("/api/employees",{method:id?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    const b=await res.json().catch(()=>({}));
+    if(!res.ok){$("empMsg").textContent=EMP_ERRORS[b.error]||`Couldn't save (${res.status}).`;return;}
+    $("empModal").classList.remove("show");
+    toast(id?`${payload.name} updated ✓`:`${payload.name} added ✓`);
+    await loadEmployees();
+  }catch(err){$("empMsg").textContent="Network error — "+(err&&err.message?err.message:"try again");}
+  finally{$("empSaveBtn").disabled=false;}
+}
+async function deleteEmployeeClick(){
+  const id=$("empId").value, emp=employees.find(e=>e.id===id);if(!emp)return;
+  if(!confirm(`Delete ${emp.name} and all their leave days? To keep their leave history, untick "Active" instead.`))return;
+  const res=await fetch("/api/employees?id="+encodeURIComponent(id),{method:"DELETE"});
+  if(!res.ok){$("empMsg").textContent=EMP_ERRORS[(await res.json().catch(()=>({}))).error]||"Couldn't delete.";return;}
+  $("empModal").classList.remove("show");toast(`${emp.name} deleted`);await loadEmployees();
+}
+$("empAddBtn").onclick=()=>openEmpModal(null);
+$("empCancelBtn").onclick=()=>$("empModal").classList.remove("show");
+$("empModal").onclick=e=>{if(e.target===$("empModal"))$("empModal").classList.remove("show");};
+$("empSaveBtn").onclick=saveEmployee;
+$("empDeleteBtn").onclick=deleteEmployeeClick;
+$("empShowInactive").onchange=renderEmployees;
+$("empName").addEventListener("keydown",e=>{if(e.key==="Enter")saveEmployee();});
+$("empTable").addEventListener("click",e=>{
+  const b=e.target.closest("[data-editemp]");if(b)openEmpModal(employees.find(x=>x.id===b.dataset.editemp));
+});
+
+// ---- Leave report: days per person per type for one year ----
+let reportYear=null;
+function reportYears(){return[...new Set(lv.days.map(d=>String(d.year)))];}
+function reportRows(){
+  const days=lv.days.filter(d=>String(d.year)===reportYear);
+  // Inactive employees still appear if they took leave that year
+  return meFirst(lv.employees).map(e=>{
+    const c={annual:0,sick:0,wfh:0,other:0}, titles={};
+    days.forEach(d=>{
+      const v=lv.cells[e.id+"|"+d.iso];
+      if(!v||c[v.t]===undefined) return;
+      c[v.t]++;
+      if(v.t==="other"){const k=v.title||"Untitled";titles[k]=(titles[k]||0)+1;}
+    });
+    // Work from home is a working day, so it doesn't count as days off
+    return{e,p:e.name,c,titles,off:c.annual+c.sick+c.other};
+  }).filter(r=>r.e.active!==false||r.off||r.c.wfh);
+}
+function ensureReportYear(){
+  const years=reportYears();
+  if(!reportYear||!years.includes(reportYear)){
+    const y=TODAY.slice(0,4);
+    reportYear=years.includes(y)?y:years[years.length-1];
+  }
+}
+function renderLeaveReport(){
+  const years=reportYears();
+  $("lvReportYear").innerHTML=years.map(y=>`<option value="${y}"${y===reportYear?" selected":""}>${y}</option>`).join("");
+  const span=lv.days.filter(d=>String(d.year)===reportYear);
+  const partial=span.length&&(span[0].iso.slice(5)!=="01-01"||span[span.length-1].iso.slice(5)!=="12-31");
+  $("lvReportNote").textContent=`Working days only (weekends are never counted). Days off = annual + sick + other; work from home is not a day off.`+
+    (partial?` ${reportYear} covers ${fmtDate(span[0].iso)} – ${fmtDate(span[span.length-1].iso)} only.`:"");
+  const me=(currentUser||"").toLowerCase();
+  const rows=reportRows();
+  const cell=n=>`<td class="num${n?"":" zero"}">${n}</td>`;
+  const tot={annual:0,sick:0,wfh:0,other:0,off:0};
+  const body=rows.map(r=>{
+    Object.keys(r.c).forEach(k=>tot[k]+=r.c[k]);tot.off+=r.off;
+    const t=Object.entries(r.titles).map(([k,n])=>`${esc(k)} ${n}`).join(" · ");
+    return`<tr class="${isMe(r.e)?"mine":""}"><td class="nm">${esc(r.p)}</td>${cell(r.c.annual)}${cell(r.c.sick)}${cell(r.c.wfh)}`+
+      `<td class="num${r.c.other?"":" zero"}">${r.c.other}${t?`<span class="titles">${t}</span>`:""}</td><td class="num" style="font-weight:750">${r.off}</td></tr>`;
+  }).join("");
+  const sw=t=>`<span class="sw" style="background:var(--lv-${t})"></span>`;
+  $("lvReport").innerHTML=`<thead><tr><th>Employee</th><th class="num">${sw("annual")}Annual</th><th class="num">${sw("sick")}Sick</th>`+
+    `<th class="num">${sw("wfh")}Work from home</th><th class="num">${sw("other")}Other</th><th class="num">Total days off</th></tr></thead>`+
+    `<tbody>${body||`<tr><td colspan="6" class="lv-empty">No people yet.</td></tr>`}</tbody>`+
+    (rows.length>1?`<tfoot><tr><td>Team total</td>${cell(tot.annual)}${cell(tot.sick)}${cell(tot.wfh)}${cell(tot.other)}<td class="num">${tot.off}</td></tr></tfoot>`:"");
+}
+function downloadLeaveReport(){
+  const q=v=>/[",\n]/.test(v)?`"${String(v).replace(/"/g,'""')}"`:String(v);
+  const lines=[["Employee","Annual leave","Sick leave","Work from home","Other leave","Other leave titles","Total days off"].join(",")];
+  reportRows().forEach(r=>lines.push([r.p,r.c.annual,r.c.sick,r.c.wfh,r.c.other,Object.entries(r.titles).map(([k,n])=>`${k} ${n}`).join("; "),r.off].map(q).join(",")));
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([lines.join("\n")],{type:"text/csv"}));
+  a.download=`qa-leave-report-${reportYear}.csv`;a.click();
+  toast("Report downloaded ✓");
+}
+$("lvReportYear").onchange=e=>{
+  reportYear=e.target.value;
+  const sc=$("lvScroll"),x=sc.scrollLeft,y=window.scrollY;
+  renderLeaves();sc.scrollLeft=x;window.scrollTo(0,y);
+};
+$("lvReportCsv").onclick=downloadLeaveReport;
+
+// Painting: press on a day in an editable row, drag along the row, release.
+function cellsBetween(a,b){
+  const [lo,hi]=a<b?[a,b]:[b,a];const out=[];
+  for(let i=lo;i<=hi;i++) if(!lv.days[i].wkend) out.push(i);
+  return out;
+}
+function previewDrag(){
+  const row=drag.row, wanted=new Set(cellsBetween(drag.start,drag.end));
+  row.querySelectorAll(".lv-cell").forEach(td=>{
+    const i=+td.dataset.i;
+    td.classList.toggle("pending",wanted.has(i));
+  });
+}
+$("lvTable").addEventListener("pointerdown",e=>{
+  const td=e.target.closest(".lv-cell");if(!td||td.classList.contains("wkend"))return;
+  const row=td.closest(".lv-row");if(!row||!row.classList.contains("editable"))return;
+  e.preventDefault();
+  drag={row,emp:row.dataset.emp,start:+td.dataset.i,end:+td.dataset.i};
+  previewDrag();
+});
+$("lvTable").addEventListener("pointerover",e=>{
+  if(!drag)return;
+  const td=e.target.closest(".lv-cell");
+  if(!td||td.closest(".lv-row")!==drag.row)return;
+  drag.end=+td.dataset.i;previewDrag();
+});
+window.addEventListener("pointerup",()=>{if(drag)commitDrag();});
+window.addEventListener("pointercancel",()=>{if(drag){drag.row.querySelectorAll(".pending").forEach(td=>td.classList.remove("pending"));drag=null;}});
+
+async function commitDrag(){
+  const {emp:employeeId,start,end}=drag;drag=null;
+  const idx=cellsBetween(start,end);
+  if(!idx.length){renderLeaves();return;}
+  let type=brush||null;
+  const title=type==="other"?$("lvTitle").value.replace(/\s+/g," ").trim():"";
+  // A single click on a day already holding this exact leave toggles it off.
+  // Other leave with a different title is an edit, so it overwrites instead.
+  if(type&&idx.length===1){
+    const cur=lv.cells[employeeId+"|"+lv.days[idx[0]].iso];
+    if(cur&&cur.t===type&&(type!=="other"||(cur.title||"")===title)) type=null;
+  }
+  const dates=idx.map(i=>lv.days[i].iso);
+  const before={};dates.forEach(d=>{before[d]=lv.cells[employeeId+"|"+d];});
+  // Optimistic: show the change now, roll back if the server refuses
+  dates.forEach(d=>{const k=employeeId+"|"+d;if(type)lv.cells[k]={t:type,by:currentUser,at:new Date().toISOString(),...(title?{title}:{})};else delete lv.cells[k];});
+  renderLeaves();
+  try{
+    const res=await fetch("/api/leaves",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({employeeId,dates,type,title})});
+    if(res.status===401){showLock("Session expired — sign in again.");throw new Error("session expired");}
+    if(!res.ok){const b=await res.json().catch(()=>({}));throw new Error(b.detail||b.error||("save failed ("+res.status+")"));}
+    toast(type?`${leaveLabel({t:type,title})} · ${dates.length} day${dates.length>1?"s":""} saved ✓`:`Cleared ${dates.length} day${dates.length>1?"s":""}`);
+  }catch(err){
+    dates.forEach(d=>{const k=employeeId+"|"+d;if(before[d])lv.cells[k]=before[d];else delete lv.cells[k];});
+    renderLeaves();
+    toast("Couldn't save — "+(err&&err.message?err.message:"error"));
+  }
+}
+
+$("lvBrushes").addEventListener("click",e=>{
+  const b=e.target.closest("[data-brush]");if(!b)return;
+  brush=b.dataset.brush;
+  document.querySelectorAll("#lvBrushes .lv-brush").forEach(x=>x.classList.toggle("sel",x===b));
+  $("lvTitle").classList.toggle("hidden",brush!=="other");
+  if(brush==="other") $("lvTitle").focus();
+});
+$("lvMonth").onchange=e=>scrollToMonth(e.target.value);
+$("lvTodayBtn").onclick=scrollToToday;
+$("lvAddPersonBtn").onclick=()=>document.querySelector('#tabs .tab[data-type="employees"]').click();
+
 // ---- Reload ----
 async function loadRota(){
   store=sharedStore();
   showBadge();
   try{data=await store.read();}catch{data=[];}
   renderAll();
+  loadEmployees();
+  if(leavesVisible) loadLeaves();
 }
 $("refreshBtn").onclick=async()=>{await loadRota();toast("Reloaded");};
-window.addEventListener("focus",()=>{if(store&&store.mode==="shared")loadRota();});
+window.addEventListener("focus",()=>{if(store&&store.mode==="shared"&&!drag)loadRota();});
 
 // ---- Toast ----
 let toastTimer;

@@ -78,6 +78,82 @@ export async function writeRota(entries, expectedVersion) {
 }
 
 // ---------------------------------------------------------------------------
+// Employees + leaves calendar
+//   rota:employees  hash, field <employee id> -> JSON { id, name, username,
+//                   position, active, createdAt, updatedBy, updatedAt }
+//   rota:leaves     hash, field "<employee id>|<YYYY-MM-DD>" -> JSON { t, title?, by, at }
+// Both live in their own keys: nothing here reads or rewrites rota:data,
+// rota:version or rota:users. Leaves are keyed by the employee's id, not their
+// name, so renaming someone keeps their leave. One hash field per record means
+// two people saving at once never touch the same field — no versioning needed.
+// ---------------------------------------------------------------------------
+const EMPLOYEES_KEY = "rota:employees";
+const LEAVES_KEY    = "rota:leaves";
+
+async function pipeline(commands) {
+  const cfg = redisConfig();
+  if (!cfg) throw new Error("STORAGE_NOT_CONFIGURED");
+  const res = await fetch(`${cfg.url}/pipeline`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${cfg.token}`, "Content-Type": "application/json" },
+    body: JSON.stringify(commands),
+    cache: "no-store",
+  });
+  const body = await res.json().catch(() => null);
+  if (!res.ok || !Array.isArray(body)) throw new Error(`redis: pipeline ${res.status}`);
+  return body.map((r) => r?.result);
+}
+
+// Upstash returns HGETALL as a flat [field, value, field, value, …] array
+function parseHash(flat) {
+  const out = {};
+  if (!Array.isArray(flat)) return out;
+  for (let i = 0; i + 1 < flat.length; i += 2) {
+    try { out[flat[i]] = JSON.parse(flat[i + 1]); } catch { /* skip a corrupt record */ }
+  }
+  return out;
+}
+
+export async function readEmployees() {
+  const [flat] = await pipeline([["HGETALL", EMPLOYEES_KEY]]);
+  return Object.values(parseHash(flat)).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export async function writeEmployee(emp) {
+  await redis(["HSET", EMPLOYEES_KEY, emp.id, JSON.stringify(emp)]);
+}
+
+/** Delete an employee and every leave day stored under them. */
+export async function deleteEmployee(id) {
+  const [flat] = await pipeline([["HGETALL", LEAVES_KEY]]);
+  const fields = Object.keys(parseHash(flat)).filter((f) => f.startsWith(`${id}|`));
+  if (fields.length) await redis(["HDEL", LEAVES_KEY, ...fields]);
+  await redis(["HDEL", EMPLOYEES_KEY, id]);
+}
+
+export async function readLeavesAndEmployees() {
+  const [leaves, emps] = await pipeline([["HGETALL", LEAVES_KEY], ["HGETALL", EMPLOYEES_KEY]]);
+  return {
+    cells: parseHash(leaves),
+    employees: Object.values(parseHash(emps)).sort((a, b) => a.name.localeCompare(b.name)),
+  };
+}
+
+/** Set (type, optional title) or clear (type null) one employee's leave on a list of days. */
+export async function writeLeaveDays(employeeId, dates, type, by, title) {
+  const fields = dates.map((d) => `${employeeId}|${d}`);
+  if (!fields.length) return;
+  if (type) {
+    const cell = { t: type, by, at: new Date().toISOString() };
+    if (title) cell.title = title;
+    const value = JSON.stringify(cell);
+    await redis(["HSET", LEAVES_KEY, ...fields.flatMap((f) => [f, value])]);
+  } else {
+    await redis(["HDEL", LEAVES_KEY, ...fields]);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Password hashing — SHA-256 + salt (no npm deps needed)
 // ---------------------------------------------------------------------------
 function hashPassword(password, salt) {
