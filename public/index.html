@@ -371,7 +371,7 @@
     </div>
   </div>
 
-  <!-- Leaves calendar: one row per person, one column per day, Dec 2026 – Dec 2027 -->
+  <!-- Leaves calendar: one row per person, one column per day, Nov 2026 – Dec 2027 -->
   <div id="leavesPanel" class="hidden">
     <div class="lv-bar">
       <div class="lv-brushes" id="lvBrushes" role="radiogroup" aria-label="Leave type to fill">
@@ -1227,7 +1227,7 @@ const LEAVE_TYPES={
 };
 const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const WD=["Su","Mo","Tu","We","Th","Fr","Sa"];
-let lv={from:"2026-12-01",to:"2027-12-31",people:[],cells:{},days:[],loaded:false};
+let lv={from:"2026-11-01",to:"2027-12-31",people:[],cells:{},days:[],loaded:false};
 let brush="annual", leavesVisible=false, drag=null;
 
 // All date maths in UTC so a day never shifts with the viewer's timezone.

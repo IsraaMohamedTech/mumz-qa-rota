@@ -8,7 +8,7 @@
 //   admins can fill any row.
 import { guard, readLeavesAndEmployees, writeLeaveDays } from "./_lib.js";
 
-export const LEAVE_FROM = "2026-12-01";
+export const LEAVE_FROM = "2026-11-01";
 export const LEAVE_TO   = "2027-12-31";
 const TYPES = ["annual", "sick", "wfh", "other"];
 const MAX_DAYS_PER_WRITE = 400;
