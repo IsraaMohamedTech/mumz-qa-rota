@@ -4,38 +4,36 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mumzworld QA Rota</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
+  /* Same dark palette and type as QA Hub / QA Studio; always dark */
   :root {
-    --bg:#0f1117; --panel:#171a24; --panel-2:#1f2331; --panel-3:#262b3b;
-    --border:#2c3245; --text:#e8eaf1; --muted:#8a90a6; --faint:#666d85;
-    --accent:#6c8cff; --radius:14px; --shadow:0 8px 30px rgba(0,0,0,.35);
+    color-scheme:dark;
+    --bg:#0b0f14; --panel:#121820; --panel-2:#18202b; --panel-3:#202a37;
+    --border:#222c38; --text:#e6edf3; --muted:#8b98a7; --faint:#66717f;
+    --accent:#3ddc97; --accent-ink:#06130d; --radius:12px; --shadow:0 8px 30px rgba(0,0,0,.45);
+    --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
     --oncall:#6c8cff; --oncall-bg:rgba(108,140,255,.14);
     --regression:#f0883e; --regression-bg:rgba(240,136,62,.14);
     --postcheck:#56d4a0; --postcheck-bg:rgba(86,212,160,.14);
     --active:#ffd34d;
   }
-  @media (prefers-color-scheme:light) {
-    :root {
-      --bg:#f5f6fb; --panel:#ffffff; --panel-2:#f3f5fb; --panel-3:#e9edf7;
-      --border:#e1e5f0; --text:#1a1e2c; --muted:#68708a; --faint:#98a0b5;
-      --shadow:0 8px 30px rgba(30,40,80,.10);
-      --oncall-bg:rgba(108,140,255,.12); --regression-bg:rgba(240,136,62,.14);
-      --postcheck-bg:rgba(86,212,160,.16);
-    }
-  }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:14px}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:14px}
   .wrap{max-width:1240px;margin:0 auto;padding:28px 22px 90px}
   header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
   .brand{display:flex;align-items:center;gap:14px}
-  .logo{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--accent),#56d4a0);display:grid;place-items:center;font-size:24px;box-shadow:var(--shadow)}
+  .logo{width:46px;height:46px;border-radius:12px;background:var(--panel);border:1px solid var(--border);display:grid;place-items:center;color:var(--accent)}
+  .logo svg{width:24px;height:24px}
   .brand h1{font-size:21px;font-weight:750;letter-spacing:-.02em}
   .brand p{font-size:12.5px;color:var(--muted);margin-top:2px}
   .head-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
   button{font:inherit;cursor:pointer;border:1px solid var(--border);border-radius:10px;padding:9px 15px;font-weight:600;transition:.15s;color:var(--text);background:var(--panel-2)}
   button:hover{transform:translateY(-1px);border-color:var(--accent)}
   button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  button.primary{background:linear-gradient(135deg,var(--accent),#7d9bff);color:#fff;border:none}
+  button.primary{background:var(--accent);color:var(--accent-ink);border:none}
+  button.primary:hover{filter:brightness(1.08)}
   button.danger{background:rgba(229,100,109,.15);color:#e5646d;border-color:rgba(229,100,109,.3)}
   button.danger:hover{background:rgba(229,100,109,.25)}
   button.ghost{background:transparent}
@@ -46,7 +44,7 @@
   .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
   .stat{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;position:relative;overflow:hidden}
   .stat .bar{position:absolute;left:0;top:0;bottom:0;width:4px}
-  .stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+  .stat .k{font:500 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
   .stat .v{font-size:28px;font-weight:750;margin-top:6px;letter-spacing:-.02em}
   .stat .s{font-size:12px;color:var(--faint);margin-top:3px}
   .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
@@ -120,7 +118,10 @@
   .row-actions{display:flex;gap:6px;justify-content:flex-end}
   .user-badge{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block}
   .empty{text-align:center;color:var(--muted);padding:64px 20px}
-  .empty .big{font-size:46px;margin-bottom:12px}
+  .empty .big{margin:0 auto 12px;width:46px;height:46px;color:var(--faint)}
+  .empty .big svg{width:46px;height:46px}
+  .gate-mark{width:52px;height:52px;margin:0 auto 12px;border-radius:12px;background:var(--panel-2);border:1px solid var(--border);display:grid;place-items:center;color:var(--accent)}
+  .gate-mark svg{width:28px;height:28px}
   .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;place-items:center;padding:20px;z-index:50;backdrop-filter:blur(4px);overflow:auto}
   .modal-bg.show{display:grid}
   .modal{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:26px;width:100%;max-width:560px;box-shadow:var(--shadow);margin:auto}
@@ -318,7 +319,7 @@
 <div class="wrap">
   <header>
     <div class="brand">
-      <div class="logo">🗓️</div>
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="9" width="36" height="33" rx="6"/><path d="M6 19h36M16 5v8M32 5v8M14 27h4M22 27h4M30 27h4M14 34h4M22 34h4"/></svg></div>
       <div>
         <h1>QA Rota Dashboard</h1>
         <p>On-Call · Regression · Post Checks — <span id="yearLabel"></span></p>
@@ -366,7 +367,7 @@
       <table><thead><tr id="theadRow"></tr></thead><tbody id="tbody"></tbody></table>
     </div>
     <div class="empty hidden" id="emptyState">
-      <div class="big">🗓️</div>
+      <div class="big"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="9" width="36" height="33" rx="6"/><path d="M6 19h36M16 5v8M32 5v8M14 27h4M22 27h4M30 27h4M14 34h4M22 34h4"/></svg></div>
       <p id="emptyMsg">No rota entries yet.</p>
     </div>
   </div>
@@ -561,7 +562,7 @@
 <div class="modal-bg" id="lockScreen" style="z-index:80">
   <div class="modal" style="max-width:400px">
     <div style="text-align:center;margin-bottom:20px">
-      <div style="font-size:42px;margin-bottom:10px">🗓️</div>
+      <div class="gate-mark"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="9" width="36" height="33" rx="6"/><path d="M6 19h36M16 5v8M32 5v8M14 27h4M22 27h4M30 27h4M14 34h4M22 34h4"/></svg></div>
       <h3 style="font-size:20px">Mumzworld QA Rota</h3>
       <div class="sub" style="margin-top:6px;margin-bottom:0">Sign in to view the shared rota.</div>
     </div>
